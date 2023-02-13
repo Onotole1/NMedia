@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">NMedia</string>
+    <string name="description_post_author_avatar">Post author avatar</string>
+    <string name="description_post_menu">Post menu</string>
+    <string name="description_post_like">like</string>
+    <string name="description_post_share">Share</string>
+    <string name="description_post_views">post views</string>
+    <string name="description_post_save">Save</string>
+    <string name="menu_remove">Remove</string>
+    <string name="post_text">Post Text</string>
+    <string name="menu_edit">Edit</string>
+    <string name="error_empty_content">Content can\'t be empty</string>
+    <string name="menu_update">Update</string>
+    <string name="chooser_share_post">Share post</string>
+    <string name="add_post">Add post</string>
+    <string name="save">Save</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="google_play_unavailable">Google Api Unavailable</string>
+    <string name="notification_user_liked">User %1$s liked %2$s\'s post</string>
+    <string name="channel_remote_name">Server notifications</string>
+    <string name="channel_remote_description">Notifications from remote server</string>
+    <string name="channel_like_name">Like notifications</string>
+    <string name="channel_newPost_name">New post notifications</string>
+    <string name="channel_like_description">Notifications like</string>
+    <string name="channel_new_post_description">Notifications new post</string>
+    <string name="notification_user_new_post">User %1$s create new post</string>
+    <string name="error_loading">Please, try again later</string>
+    <string name="retry_loading">Please, retry</string>
+    <string name="empty_posts">Sorry, we haven\'t any posts</string>
+
+</resources>
