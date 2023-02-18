@@ -39,29 +39,31 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
 
     fun loadPosts() {
-        thread {
-            _data.postValue(FeedModel(loading = true))
-            try {
-                val posts = repository.getAll()
-                FeedModel(posts = posts, empty = posts.isEmpty())
-            } catch (e: IOException) {
-                FeedModel(error = true)
-            }.also(_data::postValue)
-        }
+       _data.value = FeedModel(loading = true)
+        repository.getAllAsync((object  : PostRepository.GetAllCallback {
+            override fun onSuccess(posts: List<Post>) {
+                _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
+            }
+
+            override fun onError(e: Exception) {
+                _data.postValue(FeedModel(error = true))
+            }
+        }))
     }
 
     //fun likeById(id: Long) {
     fun likeById(post: Post) {
-        thread {
-            //val post = repository.getById(id)
-            val updatedPost = if (post.likedByMe) repository.unLikeById(post.id) else repository.likeById(post.id)
-            _data.postValue(
-                FeedModel(posts =
-                _data.value!!.posts.map {
-                    if (post.id == it.id) updatedPost else it
-                })
-            )
-        }
+
+//        thread {
+//            //val post = repository.getById(id)
+//            val updatedPost = if (post.likedByMe) repository.unLikeById(post.id) else repository.likeById(post.id)
+//            _data.postValue(
+//                FeedModel(posts =
+//                _data.value!!.posts.map {
+//                    if (post.id == it.id) updatedPost else it
+//                })
+//            )
+//        }
     }
 
     fun deleteById(id: Long) {
