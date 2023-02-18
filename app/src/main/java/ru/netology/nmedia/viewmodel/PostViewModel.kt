@@ -51,42 +51,84 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         }))
     }
 
-    //fun likeById(id: Long) {
     fun likeById(post: Post) {
+        repository.likeByIdAsync(post, object : PostRepository.LikeCallback {
+            override fun onError(e: Exception) {
+                _data.postValue(FeedModel(error = true))
+            }
 
-//        thread {
-//            //val post = repository.getById(id)
-//            val updatedPost = if (post.likedByMe) repository.unLikeById(post.id) else repository.likeById(post.id)
-//            _data.postValue(
-//                FeedModel(posts =
-//                _data.value!!.posts.map {
-//                    if (post.id == it.id) updatedPost else it
-//                })
-//            )
-//        }
+            override fun onSuccess(post: Post) {
+                _data.postValue(
+                    FeedModel(posts =
+                    _data.value!!.posts.map {
+                        if (post.id == it.id)
+                        {post.copy(likedByMe = post.likedByMe, likes = post.likes) }
+                        else {
+                            it
+                        }
+                    })
+                )
+            }
+
+        })
+    }
+
+    fun unLikeById(post: Post) {
+        repository.unLikeByIdAsync(post, object : PostRepository.UnLikeCallback {
+            override fun onError(e: Exception) {
+                _data.postValue(FeedModel(error = true))
+            }
+
+            override fun onSuccess(post: Post) {
+                _data.postValue(
+                    FeedModel(posts =
+                    _data.value!!.posts.map {
+                        if (post.id == it.id)
+                        {post.copy(likedByMe = post.likedByMe, likes = post.likes) }
+                        else {
+                            it
+                        }
+                    })
+                )
+            }
+
+        })
     }
 
     fun deleteById(id: Long) {
-        thread {
-            val old = _data.value?.posts.orEmpty()
-            _data.postValue(
-                _data.value?.copy(posts = _data.value?.posts.orEmpty()
-                    .filter { it.id != id })
-            )
-            try {
-                repository.deleteById(id)
-            } catch (e: IOException) {
-                _data.postValue((_data.value?.copy(posts = old)))
+        val old = _data.value?.posts.orEmpty()
+        repository.deleteByIdAsync(id, object : PostRepository.DeleteByIdCallback {
+            override fun onError(e: Exception) {
+                _data.postValue(FeedModel(error = true))
             }
-        }
+
+            override fun onSuccess() {
+                try {
+                    _data.postValue(
+                        _data.value?.copy(posts = _data.value?.posts.orEmpty()
+                            .filter { it.id != id })
+                    )
+
+                } catch (e: IOException) {
+                    _data.postValue(_data.value?.copy(posts = old))
+                }
+            }
+
+        })
     }
 
     fun save() {
         edited.value?.let {
-            thread {
-                repository.save(it)
-                _postCreated.postValue(Unit)
-            }
+            repository.saveAsync(it, object : PostRepository.SaveCallback{
+                override fun onError(e: Exception) {
+                    _data.postValue(FeedModel(error = true))
+                }
+
+                override fun onSuccess(post: Post) {
+                    _data.postValue((FeedModel()))
+                    _postCreated.postValue(Unit)
+                }
+            })
         }
         edited.value = empty
     }
@@ -108,9 +150,16 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         edited.value = edited.value?.copy(content = text)
     }
 
-    fun getById(id: Long) {
-        thread {
-            repository.getById(id)
-        }
-    }
+//    fun getById(id: Long) {
+//        repository.getByIdAsync(id, object : PostRepository.GetByIdCallback {
+//            override fun onError(e: Exception) {
+//                _data.postValue(FeedModel(error = true))
+//            }
+//
+//            override fun onSuccess(post: Post) {
+//                _data.postValue()
+//            }
+//
+//        })
+//    }
 }
