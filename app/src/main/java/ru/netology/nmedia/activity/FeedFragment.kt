@@ -94,7 +94,12 @@ class FeedFragment : Fragment() {
         }
 
         binding.swipeRefresh.setOnRefreshListener {
-            viewModel.loadPosts()
+            viewModel.data.observe(viewLifecycleOwner, {state: FeedModel ->
+                adapter.submitList(state.posts)
+                binding.swipeRefresh.isRefreshing = state.refreshing
+            })
+            viewModel.refreshPosts()
+            //binding.swipeRefresh.isRefreshing = state.refreshing
         }
 
         //Add post button
