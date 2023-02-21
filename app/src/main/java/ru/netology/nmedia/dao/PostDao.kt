@@ -1,9 +1,11 @@
-package ru.netology.nmedia.db.dao
+package ru.netology.nmedia.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.TypeConverter
+import ru.netology.nmedia.dto.Attachment
 import ru.netology.nmedia.entity.PostEntity
 
 //interface PostDao {
@@ -49,4 +51,10 @@ interface PostDao {
         """
     )
     fun shareById(id: Long)
+}
+
+class Converters {
+
+    @TypeConverter
+    fun fromAttachmentType(value : Attachment) = value.url
 }
