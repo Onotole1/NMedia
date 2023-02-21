@@ -4,6 +4,7 @@ import android.net.Uri
 import android.view.View
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
@@ -27,9 +28,19 @@ class PostViewHolder(
             like.text = changeNumber(post.likes)
             share.text = changeNumber(post.shares)
 
-//            like.setImageResource(
-//                if (post.likedByMe) R.drawable.ic_liked_24 else R.drawable.ic_like_24dp
-//            )
+            val urlAvatar = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
+            val urlAttachments = "http://10.0.2.2:9999/images/${post.attachment?.url}"
+
+            if (post.attachment != null) {
+                Glide.with(binding.attachmentImage)
+                    .load(urlAttachments)
+                    .into(binding.attachmentImage)
+            }
+
+            Glide.with(binding.avatar).load(urlAvatar).circleCrop().placeholder(R.drawable.ic_baseline_miscellaneous_services_24)
+                .error(R.drawable.ic_baseline_error_24).into(binding.avatar)
+
+            //if(post.att)
 
             if (post.videoUrl != null) {
                 videoLayout.visibility = View.VISIBLE

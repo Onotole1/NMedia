@@ -51,3 +51,4 @@ out/
 !**/src/test/**
 /daemon/
 /caches/
+/caches/

@@ -96,6 +96,32 @@
         tools:text="@sample/posts.json/data/content" />
 
     <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/attachmentBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="content"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="265dp" />
+
+    <ImageView
+        android:id="@+id/attachmentImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/attachmentBarrier"
+        app:layout_constraintTop_toBottomOf="@id/attachmentBarrier"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <TextView
+        android:id="@+id/attachmentDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/attachmentBarrier"
+        android:layout_marginBottom="@dimen/margin_default"
+        android:visibility="gone"/>
+
+    <androidx.constraintlayout.widget.Barrier
         android:id="@+id/footer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
