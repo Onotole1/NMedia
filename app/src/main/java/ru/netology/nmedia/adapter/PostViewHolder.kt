@@ -3,6 +3,7 @@ package ru.netology.nmedia.adapter
 import android.net.Uri
 import android.view.View
 import android.widget.PopupMenu
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.netology.nmedia.R
@@ -19,6 +20,16 @@ class PostViewHolder(
 
     fun bind(post: Post) {
         currentPost = post
+        val urlAvatar = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
+        val urlAttachments = "http://10.0.2.2:9999/images/${post.attachment?.url}"
+
+        if (post.attachment != null) {
+            binding.attachmentImage.isVisible = true
+            Glide.with(binding.attachmentImage)
+                .load(urlAttachments)
+                .into(binding.attachmentImage)
+        }
+
         binding.apply {
             author.text = post.author
             published.text = post.published
@@ -28,14 +39,15 @@ class PostViewHolder(
             like.text = changeNumber(post.likes)
             share.text = changeNumber(post.shares)
 
-            val urlAvatar = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
-            val urlAttachments = "http://10.0.2.2:9999/images/${post.attachment?.url}"
+//            val urlAvatar = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
+//            val urlAttachments = "http://10.0.2.2:9999/images/${post.attachment?.url}"
 
-            if (post.attachment != null) {
-                Glide.with(binding.attachmentImage)
-                    .load(urlAttachments)
-                    .into(binding.attachmentImage)
-            }
+//            if (post.attachment != null) {
+//                binding.attachmentImage.isVisible = true
+//                Glide.with(binding.attachmentImage)
+//                    .load(urlAttachments)
+//                    .into(binding.attachmentImage)
+//            }
 
             Glide.with(binding.avatar).load(urlAvatar).circleCrop().placeholder(R.drawable.ic_baseline_miscellaneous_services_24)
                 .error(R.drawable.ic_baseline_error_24).into(binding.avatar)
