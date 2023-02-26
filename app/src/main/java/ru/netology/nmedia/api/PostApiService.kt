@@ -38,13 +38,13 @@ interface PostsApiService {
     fun save(@Body post: Post): Call<Post>
 
     @DELETE("posts/{id}")
-    fun removeById(@Path("id") id: Long): Call<Unit>
+    fun deleteById(@Path("id") id: Long): Call<Unit>
 
     @POST("posts/{id}/likes")
     fun likeById(@Path("id") id: Long): Call<Post>
 
     @DELETE("posts/{id}/likes")
-    fun dislikeById(@Path("id") id: Long): Call<Post>
+    fun unlikeById(@Path("id") id: Long): Call<Post>
 }
 
 object PostsApi {

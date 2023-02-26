@@ -10,6 +10,7 @@ import ru.netology.nmedia.repository.PostRepository
 import ru.netology.nmedia.repository.PostRepositoryImpl
 import ru.netology.nmedia.util.SingleLiveEvent
 import java.io.IOException
+import java.net.ConnectException
 
 private val empty = Post(
     id = 0,
@@ -41,7 +42,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun refreshPosts() {
         _data.value = FeedModel(refreshing = true)
-        repository.getAllAsync((object  : PostRepository.GetAllCallback {
+        repository.getAllAsync((object  : PostRepository.Callback<List<Post>> {
             override fun onSuccess(posts: List<Post>) {
                 _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
             }
@@ -54,7 +55,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun loadPosts() {
        _data.value = FeedModel(loading = true)
-        repository.getAllAsync((object  : PostRepository.GetAllCallback {
+        repository.getAllAsync((object  : PostRepository.Callback<List<Post>> {
             override fun onSuccess(posts: List<Post>) {
                 _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
             }
@@ -66,9 +67,11 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(post: Post) {
-        repository.likeByIdAsync(post, object : PostRepository.LikeCallback {
+        repository.likeByIdAsync(post, object : PostRepository.Callback<Post> {
             override fun onError(e: Exception) {
-                _data.postValue(FeedModel(error = true))
+                _data.postValue(
+                    if (e is ConnectException) FeedModel(error = true) else FeedModel(connectionError = true)
+                )
             }
 
             override fun onSuccess(post: Post) {
@@ -88,9 +91,11 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun unLikeById(post: Post) {
-        repository.unLikeByIdAsync(post, object : PostRepository.UnLikeCallback {
+        repository.unLikeByIdAsync(post, object : PostRepository.Callback<Post> {
             override fun onError(e: Exception) {
-                _data.postValue(FeedModel(error = true))
+                _data.postValue(
+                    if (e is ConnectException) FeedModel(error = true) else FeedModel(connectionError = true)
+                )
             }
 
             override fun onSuccess(post: Post) {
@@ -111,9 +116,11 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun deleteById(id: Long) {
         val old = _data.value?.posts.orEmpty()
-        repository.deleteByIdAsync(id, object : PostRepository.DeleteByIdCallback {
+        repository.deleteByIdAsync(id, object : PostRepository.CallbackUnit<Unit> {
             override fun onError(e: Exception) {
-                _data.postValue(FeedModel(error = true))
+                _data.postValue(
+                    if (e is ConnectException) FeedModel(error = true) else FeedModel(connectionError = true)
+                )
             }
 
             override fun onSuccess() {
@@ -133,14 +140,17 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun save() {
         edited.value?.let {
-            repository.saveAsync(it, object : PostRepository.SaveCallback{
+            repository.saveAsync(it, object : PostRepository.Callback<Post> {
                 override fun onError(e: Exception) {
-                    _data.postValue(FeedModel(error = true))
+                    _data.postValue(
+                        if (e is ConnectException) FeedModel(error = true) else FeedModel(connectionError = true)
+                    )
                 }
 
                 override fun onSuccess(post: Post) {
                     _data.postValue((FeedModel()))
                     _postCreated.postValue(Unit)
+                    loadPosts()
                 }
             })
         }
