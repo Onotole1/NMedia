@@ -28,6 +28,8 @@ class PostViewHolder(
             Glide.with(binding.attachmentImage)
                 .load(urlAttachments)
                 .into(binding.attachmentImage)
+        } else {
+            binding.attachmentImage.isVisible = false
         }
 
         binding.apply {

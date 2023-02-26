@@ -22,34 +22,6 @@ class PostRepositoryImpl : PostRepository {
         private val jsonType = "application/json".toMediaType()
     }
 
-//    override fun likeById(id: Long) : Post {
-//        val requestLike:Request = Request.Builder()
-//            .post(gson.toJson("").toRequestBody(jsonType))
-//            .url("${BASE_URL}/api/slow/posts/$id/likes")
-//            .build()
-//
-//        return client.newCall(requestLike)
-//            .execute()
-//            .let {it.body?.string() ?: throw RuntimeException("body is null")}
-//            .let {
-//                gson.fromJson(it, Post::class.java)
-//            }
-//    }
-//
-//    override fun unLikeById(id: Long) : Post {
-//        val requestUnlike:Request = Request.Builder()
-//            .delete()
-//            .url("${BASE_URL}/api/slow/posts/$id/likes")
-//            .build()
-//
-//        return client.newCall(requestUnlike)
-//            .execute()
-//            .let {it.body?.string() ?: throw RuntimeException("body is null")}
-//            .let {
-//                gson.fromJson(it, Post::class.java)
-//            }
-//    }
-
     override fun shareById(id: Long) {
     }
 
@@ -167,29 +139,6 @@ class PostRepositoryImpl : PostRepository {
             })
     }
 
-//    override fun save(post: Post) {
-//        val request:Request = Request.Builder()
-//            .post(gson.toJson(post).toRequestBody(jsonType))
-//            .url("${BASE_URL}/api/slow/posts")
-//            .build()
-//
-//        client.newCall(request)
-//            .execute()
-//            .close()
-//    }
-//
-//
-//    override fun deleteById(id: Long) {
-//        val request:Request = Request.Builder()
-//            .delete()
-//            .url("${BASE_URL}/api/slow/posts/$id")
-//            .build()
-//
-//        client.newCall(request)
-//            .execute()
-//            .close()
-//    }
-
     override fun getAllAsync(callback: PostRepository.GetAllCallback) {
         val request: Request = Request.Builder()
             .url("${BASE_URL}/api/slow/posts")
@@ -211,18 +160,5 @@ class PostRepositoryImpl : PostRepository {
                 }
             })
     }
-
-//    override fun getById(id: Long): Post {
-//        val request: Request = Request.Builder()
-//            .url("${BASE_URL}/api/slow/posts/$id")
-//            .build()
-//
-//        return client.newCall(request)
-//            .execute()
-//            .let {it.body?.string() ?: throw RuntimeException("body is null")}
-//            .let {
-//                gson.fromJson(it, Post::class.java)
-//            }
-//    }
 
 }
