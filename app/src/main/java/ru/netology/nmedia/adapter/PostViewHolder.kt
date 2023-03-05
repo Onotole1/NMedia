@@ -21,16 +21,16 @@ class PostViewHolder(
     fun bind(post: Post) {
         currentPost = post
         val urlAvatar = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
-        val urlAttachments = "http://10.0.2.2:9999/images/${post.attachment?.url}"
+        //val urlAttachments = "http://10.0.2.2:9999/images/${post.attachment?.url}"
 
-        if (post.attachment != null) {
-            binding.attachmentImage.isVisible = true
-            Glide.with(binding.attachmentImage)
-                .load(urlAttachments)
-                .into(binding.attachmentImage)
-        } else {
-            binding.attachmentImage.isVisible = false
-        }
+//        if (post.attachment != null) {
+//            binding.attachmentImage.isVisible = true
+//            Glide.with(binding.attachmentImage)
+//                .load(urlAttachments)
+//                .into(binding.attachmentImage)
+//        } else {
+//            binding.attachmentImage.isVisible = false
+//        }
 
         binding.apply {
             author.text = post.author

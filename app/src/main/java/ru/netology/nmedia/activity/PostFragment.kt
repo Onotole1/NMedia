@@ -34,12 +34,12 @@ class PostFragment : Fragment() {
 
         val viewModel: PostViewModel by viewModels(::requireParentFragment)
         with(binding.scrollContent) {
-            viewModel.data.observe(viewLifecycleOwner) { feedposts ->
+            viewModel.state.observe(viewLifecycleOwner) { feedposts ->
                 dataModel.postIdMessage.observe(activity as LifecycleOwner, {
                     val postIdClicked = it
 
-                    //Ошибка скорее всего после изменения разметки списка постов!!
-                    val post = feedposts.posts.find { it.id == postIdClicked }
+                    //TODO &!&!&!&!&
+                    //val post = feedposts.posts.find { it.id == postIdClicked }
                     if (post != null) {
                         author.text = post.author
                         published.text = post.published

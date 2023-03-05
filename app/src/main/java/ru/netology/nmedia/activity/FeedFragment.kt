@@ -16,7 +16,6 @@ import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
-import ru.netology.nmedia.model.FeedModel
 import ru.netology.nmedia.viewmodel.DataModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 
@@ -54,8 +53,8 @@ class FeedFragment : Fragment() {
             }
 
             override fun onLike(post: Post) {
-                //viewModel.likeById(post.id)
-                viewModel.likeById(post)
+                //viewModel.likeById(post)
+                if (post.likedByMe) viewModel.unLikeById(post) else viewModel.likeById(post)
             }
 
             override fun onShare(post: Post) {
@@ -82,21 +81,25 @@ class FeedFragment : Fragment() {
 
         binding.list.adapter = adapter
         binding.list.itemAnimator = null // эта вставка должна помочь с  проблемой мерцания
-        viewModel.data.observe(viewLifecycleOwner, { state: FeedModel ->
-            adapter.submitList(state.posts)
+        viewModel.state.observe(viewLifecycleOwner) { state->
+            //adapter.submitList(state.posts)
             binding.progress.isVisible = state.loading
             binding.errorGroup.isVisible = state.error
-            binding.emptyText.isVisible = state.empty
             binding.connectionLost.isVisible = state.connectionError
-        })
+        }
+
+        viewModel.data.observe(viewLifecycleOwner) { data->
+            adapter.submitList(data.posts)
+            binding.emptyText.isVisible = data.empty
+        }
 
         binding.retryButton.setOnClickListener {
             viewModel.loadPosts()
         }
 
         binding.swipeRefresh.setOnRefreshListener {
-            viewModel.data.observe(viewLifecycleOwner, {state: FeedModel ->
-                adapter.submitList(state.posts)
+            viewModel.state.observe(viewLifecycleOwner, { state ->
+                //adapter.submitList(state.posts)
                 binding.swipeRefresh.isRefreshing = state.refreshing
             })
             viewModel.refreshPosts()
