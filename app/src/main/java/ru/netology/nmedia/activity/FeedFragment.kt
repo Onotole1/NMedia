@@ -82,7 +82,6 @@ class FeedFragment : Fragment() {
         binding.list.adapter = adapter
         binding.list.itemAnimator = null // эта вставка должна помочь с  проблемой мерцания
         viewModel.state.observe(viewLifecycleOwner) { state->
-            //adapter.submitList(state.posts)
             binding.progress.isVisible = state.loading
             binding.errorGroup.isVisible = state.error
             binding.connectionLost.isVisible = state.connectionError
@@ -99,11 +98,9 @@ class FeedFragment : Fragment() {
 
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.state.observe(viewLifecycleOwner, { state ->
-                //adapter.submitList(state.posts)
                 binding.swipeRefresh.isRefreshing = state.refreshing
             })
             viewModel.refreshPosts()
-            //binding.swipeRefresh.isRefreshing = state.refreshing
         }
 
         //Add post button

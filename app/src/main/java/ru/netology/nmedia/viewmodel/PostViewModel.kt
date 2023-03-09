@@ -22,7 +22,6 @@ private val empty = Post(
     likes = 0,
     shares = 0,
     videoUrl = null,
-    //attachment = null
 )
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
@@ -138,17 +137,4 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         }
         edited.value = edited.value?.copy(content = text)
     }
-
-//    fun getById(id: Long) {
-//        repository.getByIdAsync(id, object : PostRepository.GetByIdCallback {
-//            override fun onError(e: Exception) {
-//                _data.postValue(FeedModel(error = true))
-//            }
-//
-//            override fun onSuccess(post: Post) {
-//                _data.postValue()
-//            }
-//
-//        })
-//    }
 }

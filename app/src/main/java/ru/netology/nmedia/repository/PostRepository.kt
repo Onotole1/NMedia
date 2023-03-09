@@ -13,15 +13,4 @@ interface PostRepository {
     suspend fun likeByIdAsync(post: Post)
     fun shareById(id : Long)
 
-
-    interface Callback<T> {
-        fun onSuccess(posts: T) {}
-        fun onError(e: Exception) {}
-    }
-
-    interface CallbackUnit {
-        fun onSuccess() {}
-        fun onError(e: Exception) {}
-    }
-
 }

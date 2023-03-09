@@ -15,12 +15,12 @@ import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentPostBinding
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.util.ChangeNumber.changeNumber
 import ru.netology.nmedia.viewmodel.DataModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class PostFragment : Fragment() {
     private val dataModel: DataModel by activityViewModels()
-    lateinit var post: Post
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,12 +34,11 @@ class PostFragment : Fragment() {
 
         val viewModel: PostViewModel by viewModels(::requireParentFragment)
         with(binding.scrollContent) {
-            viewModel.state.observe(viewLifecycleOwner) { feedposts ->
-                dataModel.postIdMessage.observe(activity as LifecycleOwner, {
-                    val postIdClicked = it
+            viewModel.data.observe(viewLifecycleOwner) { feedposts ->
+                dataModel.postIdMessage.observe(viewLifecycleOwner) {postIdClicked ->
 
-                    //TODO &!&!&!&!&
-                    //val post = feedposts.posts.find { it.id == postIdClicked }
+                    val post = feedposts.posts.find { it.id == postIdClicked }
+
                     if (post != null) {
                         author.text = post.author
                         published.text = post.published
@@ -108,34 +107,12 @@ class PostFragment : Fragment() {
                             }.show()
                         }
                     }
-                })
+                }
             }
         }
         return binding.root
     }
 
-    //This function change number for format of app
-    fun changeNumber(count: Int): String {
-        val numberFirstToStr: Int
-        val numberSecondToStr: Int
-        if ((count >= 1_000) && (count < 10_000)) {
-            numberFirstToStr = count / 1_000
-            numberSecondToStr = ((count % 1_000) / 100)
-            if (numberSecondToStr == 0) {
-                return "$numberFirstToStr" + "K"
-            } else return "$numberFirstToStr.$numberSecondToStr" + "K"
-        } else if ((count >= 10_000) && (count < 1_000_000)) {
-            numberFirstToStr = count / 1_000
-            return "$numberFirstToStr" + "K"
-        } else if (count >= 1_000_000) {
-            numberFirstToStr = count / 1_000_000
-            numberSecondToStr = ((count % 1_000_000) / 100_000)
-            if (numberSecondToStr == 0) {
-                return "$numberFirstToStr" + "M"
-            } else return "$numberFirstToStr.$numberSecondToStr" + "M"
-        } else {
-            return "$count"
-        }
-    }
+
 
 }
