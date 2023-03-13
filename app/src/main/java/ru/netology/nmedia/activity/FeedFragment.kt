@@ -20,7 +20,7 @@ import ru.netology.nmedia.viewmodel.DataModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class FeedFragment : Fragment() {
-    private val dataModel : DataModel by activityViewModels()
+    private val dataModel: DataModel by activityViewModels()
     private val viewModel: PostViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
@@ -53,7 +53,6 @@ class FeedFragment : Fragment() {
             }
 
             override fun onLike(post: Post) {
-                //viewModel.likeById(post)
                 if (post.likedByMe) viewModel.unLikeById(post) else viewModel.likeById(post)
             }
 
@@ -81,13 +80,13 @@ class FeedFragment : Fragment() {
 
         binding.list.adapter = adapter
         binding.list.itemAnimator = null // эта вставка должна помочь с  проблемой мерцания
-        viewModel.state.observe(viewLifecycleOwner) { state->
+        viewModel.state.observe(viewLifecycleOwner) { state ->
             binding.progress.isVisible = state.loading
             binding.errorGroup.isVisible = state.error
             binding.connectionLost.isVisible = state.connectionError
         }
 
-        viewModel.data.observe(viewLifecycleOwner) { data->
+        viewModel.data.observe(viewLifecycleOwner) { data ->
             adapter.submitList(data.posts)
             binding.emptyText.isVisible = data.empty
         }
@@ -106,6 +105,18 @@ class FeedFragment : Fragment() {
         //Add post button
         binding.fab.setOnClickListener {
             findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+        }
+
+        viewModel.newerCount.observe(viewLifecycleOwner) {
+            if (it > 0) {
+                binding.newerPostLoad.show()
+            }
+        }
+
+        binding.newerPostLoad.setOnClickListener{
+            binding.newerPostLoad.hide()
+            binding.list.smoothScrollToPosition(0)
+            viewModel.refreshPosts()
         }
 
         return binding.root

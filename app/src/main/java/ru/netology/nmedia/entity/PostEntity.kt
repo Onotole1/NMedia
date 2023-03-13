@@ -14,10 +14,10 @@ data class PostEntity(
     val likedByMe: Boolean,
     val likes: Int = 0,
     val shares: Int = 0,
-    val videoUrl: String?,)
-
+    val videoUrl: String?,
+    var isRead : Boolean = false)
 {
-        fun toDto() = Post(id, author, authorAvatar, content, published, likedByMe, likes, shares, videoUrl,)
+        fun toDto() = Post(id, author, authorAvatar, content, published, likedByMe, likes, shares, videoUrl, isRead)
 
     companion object {
         fun fromDto(dto: Post) =
@@ -30,10 +30,14 @@ data class PostEntity(
                 dto.likedByMe,
                 dto.likes,
                 dto.shares,
-                dto.videoUrl,)
+                dto.videoUrl,
+                dto.isRead)
 
     }
 }
+
+fun List<PostEntity>.toDto(): List<Post> = map(PostEntity::toDto)
+fun List<Post>.toEntity(): List<PostEntity> = map(PostEntity::fromDto)
 
     data class Attachment(
         var url: String,

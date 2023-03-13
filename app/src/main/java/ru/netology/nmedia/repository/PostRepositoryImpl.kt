@@ -3,6 +3,12 @@ package ru.netology.nmedia.repository
 import androidx.lifecycle.map
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import ru.netology.nmedia.api.PostsApi
@@ -14,8 +20,11 @@ import retrofit2.Call
 import retrofit2.Response
 import ru.netology.nmedia.dao.PostDao
 import ru.netology.nmedia.entity.PostEntity
+import ru.netology.nmedia.entity.toDto
+import ru.netology.nmedia.entity.toEntity
 import java.lang.Exception
 import java.net.ConnectException
+import java.util.concurrent.CancellationException
 
 class PostRepositoryImpl (private val postDao: PostDao): PostRepository {
 
@@ -30,7 +39,27 @@ class PostRepositoryImpl (private val postDao: PostDao): PostRepository {
         private val jsonType = "application/json".toMediaType()
     }
 
-    override fun data() = postDao.getAll().map { it.map(PostEntity::toDto) }
+    override val data = postDao.getAll()
+        .map(List<PostEntity>::toDto)
+        .flowOn(Dispatchers.Default)
+
+    override fun getNewer(id: Long): Flow<Int> = flow {
+        while (true) {
+            try {
+                delay(10_000L)
+                val response = PostsApi.retrofitService.getNewer(id)
+
+                val posts = response.body().orEmpty()
+                postDao.insert(posts.toEntity())
+                emit(posts.size)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+        }
+    }
 
 
     override suspend fun getAllAsync() {
