@@ -29,4 +29,8 @@
     <string name="retry_loading">Пожалуйста, попробуй еще раз</string>
     <string name="empty_posts">Извините, у нас нет постов</string>
     <string name="have_new_posts">Свежие записи</string>
+    <string name="description_photo">Фото</string>
+    <string name="remove">Удалить</string>
+    <string name="description_select_photo">Выбрать фото</string>
+    <string name="description_take_photo">Сделать фото</string>
 </resources>
