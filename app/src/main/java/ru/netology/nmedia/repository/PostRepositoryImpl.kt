@@ -66,7 +66,10 @@ class PostRepositoryImpl (private val postDao: PostDao): PostRepository {
         val response = PostsApi.retrofitService.getAll()
         if (!response.isSuccessful) throw RuntimeException("api error")
         response.body() ?: throw RuntimeException("body is null")
+        //set isRead to 1
         postDao.insert(response.body()!!.map { it -> PostEntity.fromDto(it) })
+        //set isRead to 1
+        postDao.readNewPost()
     }
 
 
