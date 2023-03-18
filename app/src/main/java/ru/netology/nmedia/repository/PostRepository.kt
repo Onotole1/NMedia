@@ -3,6 +3,7 @@ package ru.netology.nmedia.repository
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.model.PhotoModel
 
 interface PostRepository {
     val data : Flow<List<Post>>
@@ -12,6 +13,7 @@ interface PostRepository {
     suspend fun getByIdAsync(id: Long)
     suspend fun deleteByIdAsync(id: Long)
     suspend fun saveAsync(post: Post)
+    suspend fun saveWithAttachment(post: Post, photo: PhotoModel)
     suspend fun unLikeByIdAsync(post: Post)
     suspend fun likeByIdAsync(post: Post)
     fun shareById(id : Long)

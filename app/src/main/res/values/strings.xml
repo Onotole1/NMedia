@@ -32,5 +32,6 @@
     <string name="remove">Remove</string>
     <string name="description_select_photo">Select photo</string>
     <string name="description_take_photo">Take photo</string>
+    <string name="edit_text">Enter text of your post, please</string>
 
 </resources>

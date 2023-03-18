@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.asRequestBody
 import ru.netology.nmedia.api.PostsApi
 import ru.netology.nmedia.dto.Post
 import java.io.IOException
@@ -19,9 +20,17 @@ import retrofit2.Callback
 import retrofit2.Call
 import retrofit2.Response
 import ru.netology.nmedia.dao.PostDao
+import ru.netology.nmedia.dto.Attachment
+import ru.netology.nmedia.dto.AttachmentType
+import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.entity.PostEntity
 import ru.netology.nmedia.entity.toDto
 import ru.netology.nmedia.entity.toEntity
+import ru.netology.nmedia.error.ApiError
+import ru.netology.nmedia.error.AppError
+import ru.netology.nmedia.error.NetworkError
+import ru.netology.nmedia.error.UnknownError
+import ru.netology.nmedia.model.PhotoModel
 import java.lang.Exception
 import java.net.ConnectException
 import java.util.concurrent.CancellationException
@@ -88,6 +97,34 @@ class PostRepositoryImpl (private val postDao: PostDao): PostRepository {
         if (!response.isSuccessful) throw RuntimeException("api error")
         val body = response.body() ?: throw RuntimeException("body is null")
         postDao.insert(PostEntity.fromDto(body))
+    }
+
+    override suspend fun saveWithAttachment(post: Post, photo: PhotoModel) {
+        try {
+            val media = upload(photo)
+
+            val response = PostsApi.retrofitService.save(post.copy(
+                attachment = Attachment(media.id, "photo of post number ${post.id}", AttachmentType.IMAGE)
+            ))
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            postDao.insert(PostEntity.fromDto(body))
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
+
+    private suspend fun upload(photo: PhotoModel): Media {
+        val response = PostsApi.mediaService.uploadPhoto(
+            MultipartBody.Part.createFormData("file", photo.file!!.name, photo.file.asRequestBody() )
+        )
+
+        return response.body() ?: throw ApiError(response.code(), response.message())
     }
 
     override suspend fun unLikeByIdAsync(post: Post) {

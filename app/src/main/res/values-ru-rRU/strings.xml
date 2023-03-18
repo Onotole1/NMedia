@@ -33,4 +33,5 @@
     <string name="remove">Удалить</string>
     <string name="description_select_photo">Выбрать фото</string>
     <string name="description_take_photo">Сделать фото</string>
+    <string name="edit_text">Введите текст Вашего поста, пожалуйста</string>
 </resources>

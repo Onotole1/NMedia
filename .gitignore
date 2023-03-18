@@ -44,11 +44,11 @@ out/
 *.lock
 *.receipt
 
-
 ###
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**
 !**/src/test/**
-/daemon/
-/caches/
+daemon/
+caches/
+native/
 

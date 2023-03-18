@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -24,22 +24,30 @@
                 android:id="@+id/edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
                 android:gravity="start|top"
+                android:hint="@string/edit_text"
                 android:importantForAutofill="no"
                 android:inputType="textMultiLine"
-                tools:ignore="LabelFor" />
+                android:minHeight="32dp"
+                tools:ignore="LabelFor"
+                tools:text="@tools:sample/lorem[50]" />
 
             <FrameLayout
                 android:id="@+id/photoContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <ImageView
-                    android:id="@+id/photo"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/preview"
+                    android:adjustViewBounds="true"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:contentDescription="@string/description_photo" />
+                    android:contentDescription="@string/description_photo"
+                    tools:srcCompat="@tools:sample/avatars[2]" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/removePhoto"
@@ -53,18 +61,20 @@
 
 
     <LinearLayout
-        android:orientation="horizontal"
         android:id="@+id/bottomAppBar"
         style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        android:background="?colorSurface"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageView
             android:id="@+id/pickPhoto"
-            android:background="?selectableItemBackground"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
             android:contentDescription="@string/description_select_photo"
             android:padding="@dimen/margin_default"
             app:srcCompat="@drawable/ic_photo_24dp" />
@@ -79,4 +89,4 @@
     </LinearLayout>
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
