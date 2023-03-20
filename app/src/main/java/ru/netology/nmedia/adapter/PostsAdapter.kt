@@ -16,6 +16,8 @@ interface OnInteractionListener {
     fun onDelete(post: Post) {}
     fun onPlayVideo(post: Post) {}
     fun onPostClick(post: Post) {}
+
+    fun onShowPhoto(post : Post) {}
 }
 
 class PostsAdapter( private val onInteractionListener: OnInteractionListener)

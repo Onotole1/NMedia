@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.TypeConverter
 import kotlinx.coroutines.flow.Flow
 import ru.netology.nmedia.dto.Attachment
+import ru.netology.nmedia.dto.AttachmentType
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.entity.PostEntity
 
@@ -73,5 +74,7 @@ interface PostDao {
 
 class Converters {
     @TypeConverter
-    fun fromAttachmentType(value : Attachment) = value.url
+    fun toAttachmentType(value: String) = enumValueOf<AttachmentType>(value)
+    @TypeConverter
+    fun fromAttachmentType(value: AttachmentType) = value.name
 }

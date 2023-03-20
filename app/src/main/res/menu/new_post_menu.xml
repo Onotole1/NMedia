@@ -6,5 +6,11 @@
         android:title="@string/add_post"
         android:icon="@drawable/ic_ok_24dp"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/cancel"
+        android:icon="@drawable/ic_baseline_cancel_24"
+        android:title="@string/menu_cancel"
+        app:showAsAction="always"
+        />
 </menu>
 

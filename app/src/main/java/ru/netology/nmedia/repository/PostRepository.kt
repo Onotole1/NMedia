@@ -2,6 +2,8 @@ package ru.netology.nmedia.repository
 
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
+import ru.netology.nmedia.dto.Media
+import ru.netology.nmedia.dto.MediaUpload
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.PhotoModel
 
@@ -17,5 +19,7 @@ interface PostRepository {
     suspend fun unLikeByIdAsync(post: Post)
     suspend fun likeByIdAsync(post: Post)
     fun shareById(id : Long)
+
+    suspend fun uploadPhoto(uploadedMedia : MediaUpload) : Media
 
 }

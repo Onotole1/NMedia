@@ -16,7 +16,6 @@ data class Post(
 
 data class Attachment(
     var url: String,
-    var description: String,
     var type: AttachmentType
 )
 
