@@ -113,7 +113,7 @@ class PostRepositoryImpl (private val postDao: PostDao): PostRepository {
             val media = upload(photo)
 
             val response = PostsApi.retrofitService.save(post.copy(
-                attachment = Attachment(media.id, "photo of post number ${post.id}", AttachmentType.IMAGE)
+                attachment = Attachment(media.id, AttachmentType.IMAGE)
             ))
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
