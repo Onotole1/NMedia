@@ -57,7 +57,7 @@ interface PostDao {
     suspend fun shareById(id: Long)
 
     @Query("SELECT * FROM PostEntity WHERE id = :id")
-    suspend fun getById(id: Long) : Post
+    suspend fun getById(id: Long) : PostEntity
 
     @Query("""
         UPDATE PostEntity SET
