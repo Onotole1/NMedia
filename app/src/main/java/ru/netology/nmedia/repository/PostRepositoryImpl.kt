@@ -27,7 +27,7 @@ import java.lang.Exception
 import java.net.ConnectException
 import java.util.concurrent.CancellationException
 
-class PostRepositoryImpl (private val postDao: PostDao): PostRepository {
+class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
 
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
@@ -102,23 +102,31 @@ class PostRepositoryImpl (private val postDao: PostDao): PostRepository {
     }
 
     override suspend fun saveAsync(post: Post) {
-        val response = PostsApi.retrofitService.save(post)
-        if (!response.isSuccessful) throw RuntimeException("api error")
-        val body = response.body() ?: throw RuntimeException("body is null")
-        postDao.insert(PostEntity.fromDto(body))
-    }
-
-    override suspend fun saveWithAttachment(post: Post, photo: PhotoModel) {
         try {
-            val media = upload(photo)
-
-            val response = PostsApi.retrofitService.save(post.copy(
-                attachment = Attachment(media.id, AttachmentType.IMAGE)
-            ))
+            val response = PostsApi.retrofitService.save(post)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            postDao.insert(PostEntity.fromDto(body))
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
 
+    override suspend fun saveWithAttachment(post: Post, upload: MediaUpload) {
+        try {
+            val media = uploadPhoto(upload)
+            val response = PostsApi.retrofitService.save(
+                post.copy(
+                    attachment = Attachment(media.id, AttachmentType.IMAGE)
+                )
+            )
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
             val body = response.body() ?: throw ApiError(response.code(), response.message())
             postDao.insert(PostEntity.fromDto(body))
         } catch (e: IOException) {
@@ -130,7 +138,7 @@ class PostRepositoryImpl (private val postDao: PostDao): PostRepository {
 
     private suspend fun upload(photo: PhotoModel): Media {
         val response = PostsApi.mediaService.uploadPhoto(
-            MultipartBody.Part.createFormData("file", photo.file!!.name, photo.file.asRequestBody() )
+            MultipartBody.Part.createFormData("file", photo.file!!.name, photo.file.asRequestBody())
         )
 
         return response.body() ?: throw ApiError(response.code(), response.message())

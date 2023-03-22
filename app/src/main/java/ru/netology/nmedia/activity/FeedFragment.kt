@@ -41,7 +41,7 @@ class FeedFragment : Fragment() {
             override fun onPostClick(post: Post) {
                 val postClikedId = post.id
                 dataModel.postIdMessage.value = postClikedId
-                findNavController().navigate(R.id.action_feedFragment_to_PostFragment)
+                findNavController().navigate(R.id.action_feedFragment_to_postFragment)
             }
 
             override fun onEdit(post: Post) {
@@ -87,12 +87,13 @@ class FeedFragment : Fragment() {
                 bundle.putBoolean("likedByMe", isLikedByMe)
                 bundle.putString("url", url)
                 bundle.putLong("id", id)
-                findNavController().navigate(R.id.action_feedFragment_to_showPhoto, bundle)
+                findNavController().navigate(R.id.action_feedFragment_to_photo, bundle)
             }
         })
 
         binding.list.adapter = adapter
         binding.list.itemAnimator = null // эта вставка должна помочь с  проблемой мерцания
+
         viewModel.state.observe(viewLifecycleOwner) { state ->
             binding.progress.isVisible = state.loading
             binding.errorGroup.isVisible = state.error

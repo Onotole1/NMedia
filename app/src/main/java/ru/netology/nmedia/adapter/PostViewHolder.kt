@@ -32,8 +32,18 @@ class PostViewHolder(
             like.text = ChangeNumber.changeNumber(post.likes)
             share.text = ChangeNumber.changeNumber(post.shares)
 
-            Glide.with(binding.avatar).load(urlAvatar).circleCrop().placeholder(R.drawable.ic_baseline_miscellaneous_services_24)
+            Glide.with(binding.avatar).load(urlAvatar).circleCrop()
+                .placeholder(R.drawable.ic_baseline_miscellaneous_services_24)
                 .error(R.drawable.ic_baseline_error_24).into(binding.avatar)
+
+            val urlAttachments = "http://10.0.2.2:9999/images/${post.attachment?.url}"
+
+            if (post.attachment != null) {
+                binding.attachmentImage.isVisible = true
+                Glide.with(binding.attachmentImage)
+                    .load(urlAttachments)
+                    .into(binding.attachmentImage)
+            }
 
             if (post.videoUrl != null) {
                 videoLayout.visibility = View.VISIBLE
