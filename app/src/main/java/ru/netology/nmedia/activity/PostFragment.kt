@@ -7,11 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import kotlinx.coroutines.NonCancellable.start
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentPostBinding
 import ru.netology.nmedia.dto.Post
@@ -32,12 +35,15 @@ class PostFragment : Fragment() {
             false
         )
 
+
+
         val viewModel: PostViewModel by viewModels(::requireParentFragment)
         with(binding.scrollContent) {
             viewModel.data.observe(viewLifecycleOwner) { feedposts ->
                 dataModel.postIdMessage.observe(viewLifecycleOwner) {postIdClicked ->
 
                     val post = feedposts.posts.find { it.id == postIdClicked }
+
 
                     if (post != null) {
                         author.text = post.author
@@ -46,6 +52,26 @@ class PostFragment : Fragment() {
                         like.text = changeNumber(post.likes)
                         like.isChecked = post.likedByMe
                         share.text = changeNumber(post.shares)
+
+                        val urlAvatar = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
+
+                        Glide.with(this.avatar).load(urlAvatar).circleCrop()
+                            .placeholder(R.drawable.ic_baseline_miscellaneous_services_24)
+                            .error(R.drawable.ic_baseline_error_24).into(this.avatar)
+
+                        if (post.attachment != null) {
+                            this.attachmentImage.isVisible = true
+
+//                            attachmentImage.apply {
+//                                setImageURI(Uri.parse(post.attachment.toString()))
+//                                requestFocus()
+//                                start()
+//                            }
+                            val urlAttachments = "http://10.0.2.2:9999/media/${post.attachment?.url}"
+                            Glide.with(this.attachmentImage)
+                                .load(urlAttachments)
+                                .into(this.attachmentImage)
+                        }
 
                         if (post.videoUrl != null) {
                             this.videoLayout.visibility = View.VISIBLE
@@ -78,6 +104,19 @@ class PostFragment : Fragment() {
                         videoLayout.setOnClickListener {
                             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.videoUrl))
                             startActivity(intent)
+                        }
+
+                        attachmentImage.setOnClickListener {
+                            val likes = post.likes.toString()
+                            val id = post.id
+                            val isLikedByMe = post.likedByMe
+                            val url = post.attachment!!.url
+                            val bundle = Bundle()
+                            bundle.putString("likes", likes)
+                            bundle.putBoolean("likedByMe", isLikedByMe)
+                            bundle.putString("url", url)
+                            bundle.putLong("id", id)
+                            findNavController().navigate(R.id.action_feedFragment_to_photo, bundle)
                         }
 
                         menu.setOnClickListener {

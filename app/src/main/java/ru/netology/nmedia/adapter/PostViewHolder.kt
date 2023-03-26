@@ -36,7 +36,7 @@ class PostViewHolder(
                 .placeholder(R.drawable.ic_baseline_miscellaneous_services_24)
                 .error(R.drawable.ic_baseline_error_24).into(binding.avatar)
 
-            val urlAttachments = "http://10.0.2.2:9999/images/${post.attachment?.url}"
+            val urlAttachments = "http://10.0.2.2:9999/media/${post.attachment?.url}"
 
             if (post.attachment != null) {
                 binding.attachmentImage.isVisible = true
@@ -70,6 +70,10 @@ class PostViewHolder(
 
             share.setOnClickListener {
                 onInteractionListener.onShare(post)
+            }
+
+            attachmentImage.setOnClickListener {
+                onInteractionListener.onShowPhoto(post)
             }
 
             menu.setOnClickListener {

@@ -38,17 +38,17 @@ data class PostEntity(
     companion object {
         fun fromDto(dto: Post) =
             PostEntity(
-                dto.id,
-                dto.author,
-                dto.authorAvatar,
-                dto.published,
-                dto.content,
-                dto.likedByMe,
-                dto.likes,
-                dto.shares,
-                dto.videoUrl,
-                dto.isRead,
-                AttachmentEmbeddable.fromDto(dto.attachment)
+                id = dto.id,
+                author = dto.author,
+                authorAvatar = dto.authorAvatar,
+                content = dto.content,
+                published = dto.published,
+                likedByMe = dto.likedByMe,
+                likes = dto.likes,
+                shares = dto.shares,
+                videoUrl = dto.videoUrl,
+                isRead = dto.isRead,
+                attachment = AttachmentEmbeddable.fromDto(dto.attachment)
             )
 
     }
