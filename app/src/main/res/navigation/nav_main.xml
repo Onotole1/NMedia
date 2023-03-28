@@ -21,8 +21,11 @@
             android:id="@+id/action_feedFragment_to_editPostFragment"
             app:destination="@id/editPostFragment" />
         <action
-            android:id="@+id/action_feedFragment_to_PostFragment"
+            android:id="@+id/action_feedFragment_to_postFragment"
             app:destination="@id/postFragment" />
+        <action
+            android:id="@id/action_feedFragment_to_photo"
+            app:destination="@id/photo" />
     </fragment>
     <fragment
         android:id="@+id/newPostFragment"
@@ -55,5 +58,13 @@
         <action
             android:id="@+id/action_postFragment_to_editPostFragment"
             app:destination="@id/editPostFragment" />
+        <action
+            android:id="@+id/action_feedFragment_to_photo"
+            app:destination="@id/photo" />
     </fragment>
+    <fragment
+        android:id="@+id/photo"
+        android:name="ru.netology.nmedia.activity.PhotoFragment"
+        android:label="fragment_show_photo"
+        tools:layout="@layout/fragment_photo" />
 </navigation>

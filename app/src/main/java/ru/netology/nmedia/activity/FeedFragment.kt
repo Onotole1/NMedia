@@ -16,12 +16,11 @@ import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
-import ru.netology.nmedia.model.FeedModel
 import ru.netology.nmedia.viewmodel.DataModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class FeedFragment : Fragment() {
-    private val dataModel : DataModel by activityViewModels()
+    private val dataModel: DataModel by activityViewModels()
     private val viewModel: PostViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
@@ -42,7 +41,7 @@ class FeedFragment : Fragment() {
             override fun onPostClick(post: Post) {
                 val postClikedId = post.id
                 dataModel.postIdMessage.value = postClikedId
-                findNavController().navigate(R.id.action_feedFragment_to_PostFragment)
+                findNavController().navigate(R.id.action_feedFragment_to_postFragment)
             }
 
             override fun onEdit(post: Post) {
@@ -54,8 +53,7 @@ class FeedFragment : Fragment() {
             }
 
             override fun onLike(post: Post) {
-                //viewModel.likeById(post.id)
-                viewModel.likeById(post)
+                if (post.likedByMe) viewModel.unLikeById(post) else viewModel.likeById(post)
             }
 
             override fun onShare(post: Post) {
@@ -78,34 +76,61 @@ class FeedFragment : Fragment() {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.videoUrl))
                 startActivity(intent)
             }
+
+            override fun onShowPhoto(post: Post) {
+                val likes = post.likes.toString()
+                val id = post.id
+                val isLikedByMe = post.likedByMe
+                val url = post.attachment!!.url
+                val bundle = Bundle()
+                bundle.putString("likes", likes)
+                bundle.putBoolean("likedByMe", isLikedByMe)
+                bundle.putString("url", url)
+                bundle.putLong("id", id)
+                findNavController().navigate(R.id.action_feedFragment_to_photo, bundle)
+            }
         })
 
         binding.list.adapter = adapter
         binding.list.itemAnimator = null // эта вставка должна помочь с  проблемой мерцания
-        viewModel.data.observe(viewLifecycleOwner, { state: FeedModel ->
-            adapter.submitList(state.posts)
+
+        viewModel.state.observe(viewLifecycleOwner) { state ->
             binding.progress.isVisible = state.loading
             binding.errorGroup.isVisible = state.error
-            binding.emptyText.isVisible = state.empty
             binding.connectionLost.isVisible = state.connectionError
-        })
+        }
+
+        viewModel.data.observe(viewLifecycleOwner) { data ->
+            adapter.submitList(data.posts)
+            binding.emptyText.isVisible = data.empty
+        }
 
         binding.retryButton.setOnClickListener {
             viewModel.loadPosts()
         }
 
         binding.swipeRefresh.setOnRefreshListener {
-            viewModel.data.observe(viewLifecycleOwner, {state: FeedModel ->
-                adapter.submitList(state.posts)
+            viewModel.state.observe(viewLifecycleOwner, { state ->
                 binding.swipeRefresh.isRefreshing = state.refreshing
             })
             viewModel.refreshPosts()
-            //binding.swipeRefresh.isRefreshing = state.refreshing
         }
 
         //Add post button
         binding.fab.setOnClickListener {
             findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+        }
+
+        viewModel.newerCount.observe(viewLifecycleOwner) {
+            if (it > 0) {
+                binding.newerPostLoad.show()
+            }
+        }
+
+        binding.newerPostLoad.setOnClickListener{
+            binding.newerPostLoad.hide()
+            binding.list.smoothScrollToPosition(0)
+            viewModel.refreshPosts()
         }
 
         return binding.root

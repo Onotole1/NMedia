@@ -1,6 +1,8 @@
 package ru.netology.nmedia.entity
 
 import androidx.room.*
+import ru.netology.nmedia.dto.Attachment
+import ru.netology.nmedia.dto.AttachmentType
 import ru.netology.nmedia.dto.Post
 
 @Entity
@@ -15,50 +17,59 @@ data class PostEntity(
     val likes: Int = 0,
     val shares: Int = 0,
     val videoUrl: String?,
+    var isRead: Boolean = false,
     @Embedded
-    var attachment: Attachment?)
-{
-        fun toDto() = Post(id, author, authorAvatar, content, published, likedByMe, likes, shares, videoUrl, attachment?.toDto())
+    val attachment: AttachmentEmbeddable?,
+) {
+    fun toDto() = Post(
+        id,
+        author,
+        authorAvatar,
+        content,
+        published,
+        likedByMe,
+        likes,
+        shares,
+        videoUrl,
+        isRead,
+        attachment?.toDto()
+    )
 
     companion object {
         fun fromDto(dto: Post) =
             PostEntity(
-                dto.id,
-                dto.author,
-                dto.authorAvatar,
-                dto.published,
-                dto.content,
-                dto.likedByMe,
-                dto.likes,
-                dto.shares,
-                dto.videoUrl,
-                Attachment.fromDto(dto.attachment))
+                id = dto.id,
+                author = dto.author,
+                authorAvatar = dto.authorAvatar,
+                content = dto.content,
+                published = dto.published,
+                likedByMe = dto.likedByMe,
+                likes = dto.likes,
+                shares = dto.shares,
+                videoUrl = dto.videoUrl,
+                isRead = dto.isRead,
+                attachment = AttachmentEmbeddable.fromDto(dto.attachment)
+            )
 
     }
 }
 
-    data class Attachment(
-        val url: String,
-        val description: String,
-        val type: String
-    ) {
-        fun toDto() = Attachment(url, description, type)
 
-        companion object {
-            fun fromDto(dto: Attachment?) = dto?.let {
-                Attachment(it.url, it.description, it.type)
-            }
+data class AttachmentEmbeddable(
+    var url : String,
+    var type : AttachmentType
+) {
+    fun toDto() = Attachment(url, type)
+
+    companion object {
+        fun fromDto(dto : Attachment?) = dto?.let {
+            AttachmentEmbeddable(it.url, it.type)
         }
     }
 
-class AttachmentConverter {
-    @TypeConverter
-    fun fromAttachment (attachment: Attachment) : String {
-        return attachment.url
-    }
-
-    @TypeConverter
-    fun toAttachment (attachUrl: String) {
-        //TODO Make Later
-    }
 }
+
+
+
+fun List<PostEntity>.toDto(): List<Post> = map(PostEntity::toDto)
+fun List<Post>.toEntity(): List<PostEntity> = map(PostEntity::fromDto)

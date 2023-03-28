@@ -27,5 +27,12 @@
     <string name="error_loading">Please, try again later</string>
     <string name="retry_loading">Please, retry</string>
     <string name="empty_posts">Sorry, we haven\'t any posts</string>
+    <string name="have_new_posts">New posts</string>
+    <string name="description_photo">Photo</string>
+    <string name="remove">Remove</string>
+    <string name="description_select_photo">Select photo</string>
+    <string name="description_take_photo">Take photo</string>
+    <string name="edit_text">Enter text of your post, please</string>
+    <string name="menu_cancel">Cancel post</string>
 
 </resources>
