@@ -35,4 +35,7 @@
     <string name="description_take_photo">Сделать фото</string>
     <string name="edit_text">Введите текст Вашего поста, пожалуйста</string>
     <string name="menu_cancel">Отмена поста</string>
+    <string name="signout">Выйти</string>
+    <string name="signin">Войти</string>
+    <string name="signup">Зарегистрироваться</string>
 </resources>

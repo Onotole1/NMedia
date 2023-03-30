@@ -76,6 +76,7 @@ class PostViewHolder(
                 onInteractionListener.onShowPhoto(post)
             }
 
+            menu.isVisible = post.ownedByMe
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.options_post)

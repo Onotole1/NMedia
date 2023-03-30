@@ -34,5 +34,8 @@
     <string name="description_take_photo">Take photo</string>
     <string name="edit_text">Enter text of your post, please</string>
     <string name="menu_cancel">Cancel post</string>
+    <string name="signout">Sign Out</string>
+    <string name="signin">Sign In</string>
+    <string name="signup">Sign Up</string>
 
 </resources>
