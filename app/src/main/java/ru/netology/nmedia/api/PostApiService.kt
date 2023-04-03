@@ -10,6 +10,7 @@ import retrofit2.create
 import retrofit2.http.*
 import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.auth.AppAuth
+import ru.netology.nmedia.auth.AuthState
 import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.Post
 
@@ -79,6 +80,10 @@ interface PostsApiService {
 
     @DELETE("posts/{id}/likes")
     suspend fun unlikeById(@Path("id") id: Long): Response<Post>
+
+    @FormUrlEncoded
+    @POST("users/authentication")
+    suspend fun updateUser(@Field("login") login : String, @Field("pass") pass : String) : Response<AuthState>
 }
 
 interface MediaService {

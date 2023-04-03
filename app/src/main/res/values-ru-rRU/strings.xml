@@ -38,4 +38,8 @@
     <string name="signout">Выйти</string>
     <string name="signin">Войти</string>
     <string name="signup">Зарегистрироваться</string>
+    <string name="user_name">Имя пользователя</string>
+    <string name="password">Пароль</string>
+    <string name="sign_in">Войти</string>
+    <string name="empty_login">Пожалуйста, заполните поле логин</string>
 </resources>

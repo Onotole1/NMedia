@@ -12,6 +12,7 @@ import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.asRequestBody
 import ru.netology.nmedia.api.PostsApi
+import ru.netology.nmedia.auth.AuthState
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 import ru.netology.nmedia.dao.PostDao
@@ -92,6 +93,16 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
         } catch (e: IOException) {
             throw NetworkError
         }
+    }
+
+    override suspend fun signIn(): AuthState {
+        val response = PostsApi.retrofitService.updateUser("stident", "secret")
+
+        if (!response.isSuccessful) {
+            throw ApiError(response.code(), response.message())
+        }
+
+        return response.body() ?: throw ApiError(response.code(), response.message())
     }
 
     override suspend fun deleteByIdAsync(id: Long) {

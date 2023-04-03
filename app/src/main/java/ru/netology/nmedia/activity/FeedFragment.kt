@@ -138,7 +138,7 @@ class FeedFragment : Fragment() {
 
         var menuProvider: MenuProvider? = null
 
-        authViewModel.state.observe(viewLifecycleOwner) {authState ->
+        authViewModel.state.observe(viewLifecycleOwner) { authState ->
             menuProvider?.let { requireActivity().removeMenuProvider(it) }
             //main_menu
             requireActivity().addMenuProvider(object : MenuProvider {
@@ -153,17 +153,18 @@ class FeedFragment : Fragment() {
                 override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
 
                     return when (menuItem.itemId) {
-                        R.id.signout -> {
+                        R.id.signOut -> {
                             AppAuth.getInstance().clear()
                             //HW
                             true
                         }
-                        R.id.signin -> {
+                        R.id.signIn -> {
                             AppAuth.getInstance().setAuth(5, "x-token")
                             //HW
+                            findNavController().navigate(R.id.action_feedFragment_to_signIn)
                             true
                         }
-                        R.id.signup -> {
+                        R.id.signUp -> {
                             AppAuth.getInstance().setAuth(5, "x-token")
                             //HW
                             true

@@ -2,6 +2,7 @@ package ru.netology.nmedia.repository
 
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
+import ru.netology.nmedia.auth.AuthState
 import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.MediaUpload
 import ru.netology.nmedia.dto.Post
@@ -21,5 +22,7 @@ interface PostRepository {
     fun shareById(id : Long)
 
     suspend fun uploadPhoto(uploadedMedia : MediaUpload) : Media
+
+    suspend fun signIn() : AuthState
 
 }
