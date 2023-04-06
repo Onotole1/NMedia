@@ -160,7 +160,7 @@ class FeedFragment : Fragment() {
                         }
                         R.id.signIn -> {
                             AppAuth.getInstance().setAuth(5, "x-token")
-                            //HW
+
                             findNavController().navigate(R.id.action_feedFragment_to_signIn)
                             true
                         }

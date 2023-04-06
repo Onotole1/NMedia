@@ -10,12 +10,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentSignBinding
+import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.util.AndroidUtils
 import ru.netology.nmedia.viewModel.SignViewModel
 import ru.netology.nmedia.viewmodel.AuthViewModel
 
 class SignFragment : Fragment() {
-    private val viewModel : SignViewModel by viewModels(
+    private val viewModel: SignViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
 
@@ -26,6 +27,24 @@ class SignFragment : Fragment() {
     ): View? {
         val binding = FragmentSignBinding.inflate(inflater, container, false)
 
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            if (state.connectionError) {
+                Toast.makeText(
+                    activity,
+                    this.getString(R.string.server_not_connected),
+                    Toast.LENGTH_LONG
+                )
+                    .show()
+            } else if (state.loginAndPassError) {
+                Toast.makeText(
+                    activity,
+                    this.getString(R.string.login_pass_error),
+                    Toast.LENGTH_LONG
+                )
+                    .show()
+            }
+        }
+
         binding.signInButton.setOnClickListener {
             if (binding.username.text.isNullOrBlank() || binding.password.text.isNullOrBlank()) {
                 Toast.makeText(
@@ -34,9 +53,8 @@ class SignFragment : Fragment() {
                     Toast.LENGTH_LONG
                 )
                     .show()
-            }
-            else {
-                viewModel.signIn()
+            } else {
+                viewModel.signIn(binding.username.text.toString(), binding.password.text.toString())
                 AndroidUtils.hideKeyboard(requireView())
                 findNavController().navigateUp()
             }

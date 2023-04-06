@@ -23,6 +23,6 @@ interface PostRepository {
 
     suspend fun uploadPhoto(uploadedMedia : MediaUpload) : Media
 
-    suspend fun signIn() : AuthState
+    suspend fun signIn(login: String, pass: String) : AuthState
 
 }

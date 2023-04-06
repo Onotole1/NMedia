@@ -42,4 +42,6 @@
     <string name="password">Пароль</string>
     <string name="sign_in">Войти</string>
     <string name="empty_login">Пожалуйста, заполните поле логин</string>
+    <string name="server_not_connected">Извините, у нас нет соединения с сервером. Проверьте интернет и попробуйте позже</string>
+    <string name="login_pass_error">Логин или пароль не правильные. Пожалуйста проверьте логин и пароль</string>
 </resources>

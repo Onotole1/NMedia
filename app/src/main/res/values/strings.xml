@@ -41,4 +41,6 @@
     <string name="password">Password</string>
     <string name="sign_in">Sign In</string>
     <string name="empty_login" >Please, fill in fields</string>
+    <string name="server_not_connected" >Sorry, we haven\'t connection with server. Chech internet and try later</string>
+    <string name="login_pass_error" >Login or password is wrong. Please, check login and password</string>
 </resources>

@@ -95,8 +95,8 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
         }
     }
 
-    override suspend fun signIn(): AuthState {
-        val response = PostsApi.retrofitService.updateUser("stident", "secret")
+    override suspend fun signIn(login: String, pass: String): AuthState {
+        val response = PostsApi.retrofitService.updateUser(login, pass)
 
         if (!response.isSuccessful) {
             throw ApiError(response.code(), response.message())
