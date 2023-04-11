@@ -11,7 +11,8 @@ import kotlinx.coroutines.flow.map
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.asRequestBody
-import ru.netology.nmedia.api.PostsApi
+import ru.netology.nmedia.api.MediaService
+import ru.netology.nmedia.api.PostApiService
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 import ru.netology.nmedia.dao.PostDao
@@ -26,8 +27,13 @@ import ru.netology.nmedia.model.PhotoModel
 import java.lang.Exception
 import java.net.ConnectException
 import java.util.concurrent.CancellationException
+import javax.inject.Inject
 
-class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
+class PostRepositoryImpl @Inject constructor(
+    private val postDao: PostDao,
+    private val postApiService: PostApiService,
+    private val mediaApiService: MediaService
+) : PostRepository {
 
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
@@ -48,7 +54,7 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
         while (true) {
             try {
                 delay(10_000L)
-                val response = PostsApi.retrofitService.getNewer(id)
+                val response = postApiService.getNewer(id)
 
                 val posts = response.body().orEmpty()
                 postDao.insert(posts.toEntity())
@@ -64,7 +70,7 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
 
 
     override suspend fun getAllAsync() {
-        val response = PostsApi.retrofitService.getAll()
+        val response = postApiService.getAll()
         if (!response.isSuccessful) throw RuntimeException("api error")
         response.body() ?: throw RuntimeException("body is null")
         //set isRead to 1
@@ -83,7 +89,7 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
                 "file", uploadedMedia.file.name, uploadedMedia.file.asRequestBody()
             )
 
-            val response = PostsApi.mediaService.uploadPhoto(media)
+            val response = mediaApiService.uploadPhoto(media)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
@@ -95,7 +101,7 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
     }
 
     override suspend fun deleteByIdAsync(id: Long) {
-        val response = PostsApi.retrofitService.deleteById(id)
+        val response = postApiService.deleteById(id)
         if (!response.isSuccessful) throw RuntimeException("api error")
         val body = response.body() ?: throw RuntimeException("body is null")
         postDao.removeById(id)
@@ -103,7 +109,7 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
 
     override suspend fun saveAsync(post: Post) {
         try {
-            val response = PostsApi.retrofitService.save(post)
+            val response = postApiService.save(post)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
@@ -119,7 +125,7 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
     override suspend fun saveWithAttachment(post: Post, upload: MediaUpload) {
         try {
             val media = uploadPhoto(upload)
-            val response = PostsApi.retrofitService.save(
+            val response = postApiService.save(
                 post.copy(
                     attachment = Attachment(media.id, AttachmentType.IMAGE)
                 )
@@ -137,7 +143,7 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
     }
 
     private suspend fun upload(photo: PhotoModel): Media {
-        val response = PostsApi.mediaService.uploadPhoto(
+        val response = mediaApiService.uploadPhoto(
             MultipartBody.Part.createFormData("file", photo.file!!.name, photo.file.asRequestBody())
         )
 
@@ -145,21 +151,21 @@ class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
     }
 
     override suspend fun unLikeByIdAsync(post: Post) {
-        val response = PostsApi.retrofitService.unlikeById(post.id)
+        val response = postApiService.unlikeById(post.id)
         if (!response.isSuccessful) throw RuntimeException("api error")
         val body = response.body() ?: throw RuntimeException("body is null")
         postDao.insert(PostEntity.fromDto(body))
     }
 
     override suspend fun likeByIdAsync(post: Post) {
-        val response = PostsApi.retrofitService.likeById(post.id)
+        val response = postApiService.likeById(post.id)
         if (!response.isSuccessful) throw RuntimeException("api error")
         val body = response.body() ?: throw RuntimeException("body is null")
         postDao.insert(PostEntity.fromDto(body))
     }
 
     override suspend fun getByIdAsync(id: Long) {
-        val response = PostsApi.retrofitService.getById(id)
+        val response = postApiService.getById(id)
         if (!response.isSuccessful) throw RuntimeException("api error")
         val body = response.body() ?: throw RuntimeException("body is null")
         postDao.getById(body.id)

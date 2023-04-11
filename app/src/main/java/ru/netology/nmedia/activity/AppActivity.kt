@@ -3,25 +3,16 @@ package ru.netology.nmedia.activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.annotation.WorkerThread
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.messaging.FirebaseMessaging
-import kotlinx.coroutines.NonCancellable.start
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.Companion.Companion.textArg
 import ru.netology.nmedia.databinding.ActivityAppBinding
-import ru.netology.nmedia.viewmodel.DataModel
 
 class AppActivity : AppCompatActivity() {
-//    private val worker = WorkerThread().apply { start() }
-//    private val urls = listOf("netology.jpg", "sber.jpg", "tcs.jpg")
-//    private val index = 0
-//
-//    private val dataModel : DataModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

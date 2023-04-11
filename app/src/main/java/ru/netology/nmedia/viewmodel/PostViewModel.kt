@@ -15,6 +15,7 @@ import ru.netology.nmedia.model.PhotoModel
 import ru.netology.nmedia.repository.PostRepository
 import ru.netology.nmedia.repository.PostRepositoryImpl
 import ru.netology.nmedia.util.SingleLiveEvent
+import javax.inject.Inject
 
 private val empty = Post(
     id = 0,
@@ -29,10 +30,9 @@ private val empty = Post(
     isRead = false
 )
 
-class PostViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repository: PostRepository =
-        PostRepositoryImpl(AppDb.getInstance(context = application).postDao())
+class PostViewModel @Inject constructor(
+    private  val repository: PostRepository,
+) : ViewModel() {
 
     val data: LiveData<FeedModel> = repository.data
         .map(::FeedModel)

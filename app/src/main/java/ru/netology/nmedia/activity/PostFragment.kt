@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.NonCancellable.start
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentPostBinding
@@ -22,7 +23,9 @@ import ru.netology.nmedia.util.ChangeNumber.changeNumber
 import ru.netology.nmedia.viewmodel.DataModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 
+@AndroidEntryPoint
 class PostFragment : Fragment() {
+
     private val dataModel: DataModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,11 +39,14 @@ class PostFragment : Fragment() {
         )
 
 
+        val viewModel: PostViewModel by viewModels(
+            ownerProducer = ::requireParentFragment,
+        )
 
-        val viewModel: PostViewModel by viewModels(::requireParentFragment)
+
         with(binding.scrollContent) {
             viewModel.data.observe(viewLifecycleOwner) { feedposts ->
-                dataModel.postIdMessage.observe(viewLifecycleOwner) {postIdClicked ->
+                dataModel.postIdMessage.observe(viewLifecycleOwner) { postIdClicked ->
 
                     val post = feedposts.posts.find { it.id == postIdClicked }
 
@@ -67,7 +73,8 @@ class PostFragment : Fragment() {
 //                                requestFocus()
 //                                start()
 //                            }
-                            val urlAttachments = "http://10.0.2.2:9999/media/${post.attachment?.url}"
+                            val urlAttachments =
+                                "http://10.0.2.2:9999/media/${post.attachment?.url}"
                             Glide.with(this.attachmentImage)
                                 .load(urlAttachments)
                                 .into(this.attachmentImage)
@@ -133,11 +140,14 @@ class PostFragment : Fragment() {
                                             viewModel.edit(post)
                                             val bundle = Bundle()
                                             bundle.putString("editedText", post.content)
-                                            findNavController().navigate(R.id.action_postFragment_to_editPostFragment, bundle)
-                    //                                            findNavController().navigate(R.id.action_postFragment_to_editPostFragment,
-                    //                                                Bundle().apply {
-                    //                                                    textArg = post.content
-                    //                                                })
+                                            findNavController().navigate(
+                                                R.id.action_postFragment_to_editPostFragment,
+                                                bundle
+                                            )
+                                            //                                            findNavController().navigate(R.id.action_postFragment_to_editPostFragment,
+                                            //                                                Bundle().apply {
+                                            //                                                    textArg = post.content
+                                            //                                                })
                                             true
                                         }
                                         else -> false
@@ -151,7 +161,6 @@ class PostFragment : Fragment() {
         }
         return binding.root
     }
-
 
 
 }
