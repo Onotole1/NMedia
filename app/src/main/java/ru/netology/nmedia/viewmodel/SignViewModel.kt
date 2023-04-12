@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.common.api.ApiException
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.db.AppDb
@@ -30,10 +31,11 @@ class SignViewModel(application: Application) : AndroidViewModel(application) {
         try {
             val response = repository.signIn(login, pass)
             response.token?.let { AppAuth.getInstance().setAuth(response.id, response.token) }
-        } catch (e: SocketTimeoutException) {
-            _state.value = AuthModelState(connectionError = true)
-        } catch (_: Exception) {
+            _state.value = AuthModelState(successfulRequest = true)
+        } catch (e: ApiException) {
             _state.value = AuthModelState(loginAndPassError = true)
+        } catch (e: Exception) {
+            _state.value = AuthModelState(connectionError = true)
         }
     }
 

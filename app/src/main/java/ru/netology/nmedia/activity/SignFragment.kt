@@ -42,6 +42,8 @@ class SignFragment : Fragment() {
                     Toast.LENGTH_LONG
                 )
                     .show()
+            } else if (state.successfulRequest) {
+                findNavController().navigateUp()
             }
         }
 
@@ -56,7 +58,7 @@ class SignFragment : Fragment() {
             } else {
                 viewModel.signIn(binding.username.text.toString(), binding.password.text.toString())
                 AndroidUtils.hideKeyboard(requireView())
-                findNavController().navigateUp()
+                //findNavController().navigateUp()
             }
         }
 

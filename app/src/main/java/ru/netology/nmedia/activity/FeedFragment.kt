@@ -174,7 +174,7 @@ class FeedFragment : Fragment() {
 
                 }
 
-            }.apply { menuProvider = this })
+            }.apply { menuProvider = this }, viewLifecycleOwner)
         }
 
         return binding.root
