@@ -27,6 +27,21 @@ class SignFragment : Fragment() {
     ): View? {
         val binding = FragmentSignBinding.inflate(inflater, container, false)
 
+        binding.signInButton.setOnClickListener {
+            if (binding.username.text.isNullOrBlank() || binding.password.text.isNullOrBlank()) {
+                Toast.makeText(
+                    activity,
+                    this.getString(R.string.empty_login),
+                    Toast.LENGTH_LONG
+                )
+                    .show()
+            } else {
+                viewModel.signIn(binding.username.text.toString(), binding.password.text.toString())
+                AndroidUtils.hideKeyboard(requireView())
+                //findNavController().navigateUp()
+            }
+        }
+
         viewModel.state.observe(viewLifecycleOwner) { state ->
             if (state.connectionError) {
                 Toast.makeText(
@@ -44,21 +59,6 @@ class SignFragment : Fragment() {
                     .show()
             } else if (state.successfulRequest) {
                 findNavController().navigateUp()
-            }
-        }
-
-        binding.signInButton.setOnClickListener {
-            if (binding.username.text.isNullOrBlank() || binding.password.text.isNullOrBlank()) {
-                Toast.makeText(
-                    activity,
-                    this.getString(R.string.empty_login),
-                    Toast.LENGTH_LONG
-                )
-                    .show()
-            } else {
-                viewModel.signIn(binding.username.text.toString(), binding.password.text.toString())
-                AndroidUtils.hideKeyboard(requireView())
-                //findNavController().navigateUp()
             }
         }
 

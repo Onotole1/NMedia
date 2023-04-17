@@ -14,6 +14,7 @@ import ru.netology.nmedia.model.FeedModelState
 
 import ru.netology.nmedia.repository.PostRepository
 import ru.netology.nmedia.repository.PostRepositoryImpl
+import ru.netology.nmedia.util.SingleLiveEvent
 import java.net.SocketTimeoutException
 
 class SignViewModel(application: Application) : AndroidViewModel(application) {
@@ -21,7 +22,7 @@ class SignViewModel(application: Application) : AndroidViewModel(application) {
         PostRepositoryImpl(AppDb.getInstance(context = application).postDao())
 
 
-    private val _state = MutableLiveData(AuthModelState())
+    private val _state = SingleLiveEvent<AuthModelState>()
     val state: LiveData<AuthModelState>
         get() = _state
 
