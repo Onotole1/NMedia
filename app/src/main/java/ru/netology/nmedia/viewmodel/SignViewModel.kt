@@ -9,6 +9,7 @@ import com.google.android.gms.common.api.ApiException
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.db.AppDb
+import ru.netology.nmedia.error.ApiError
 import ru.netology.nmedia.model.AuthModelState
 import ru.netology.nmedia.model.FeedModelState
 
@@ -33,7 +34,7 @@ class SignViewModel(application: Application) : AndroidViewModel(application) {
             val response = repository.signIn(login, pass)
             response.token?.let { AppAuth.getInstance().setAuth(response.id, response.token) }
             _state.value = AuthModelState(successfulRequest = true)
-        } catch (e: ApiException) {
+        } catch (e: ApiError) {
             _state.value = AuthModelState(loginAndPassError = true)
         } catch (e: Exception) {
             _state.value = AuthModelState(connectionError = true)
