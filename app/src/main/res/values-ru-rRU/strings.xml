@@ -35,4 +35,13 @@
     <string name="description_take_photo">Сделать фото</string>
     <string name="edit_text">Введите текст Вашего поста, пожалуйста</string>
     <string name="menu_cancel">Отмена поста</string>
+    <string name="signout">Выйти</string>
+    <string name="signin">Войти</string>
+    <string name="signup">Зарегистрироваться</string>
+    <string name="user_name">Имя пользователя</string>
+    <string name="password">Пароль</string>
+    <string name="sign_in">Войти</string>
+    <string name="empty_login">Пожалуйста, заполните поле логин</string>
+    <string name="server_not_connected">Извините, у нас нет соединения с сервером. Проверьте интернет и попробуйте позже</string>
+    <string name="login_pass_error">Логин или пароль не правильные. Пожалуйста проверьте логин и пароль</string>
 </resources>

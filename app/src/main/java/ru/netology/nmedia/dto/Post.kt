@@ -12,6 +12,8 @@ data class Post(
     val videoUrl: String? = null,
     var isRead: Boolean = false,
     val attachment: Attachment? = null,
+    val authorId: Long,
+    val ownedByMe: Boolean = false,
 )
 
 data class Attachment(

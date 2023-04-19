@@ -18,21 +18,23 @@ data class PostEntity(
     val shares: Int = 0,
     val videoUrl: String?,
     var isRead: Boolean = false,
+    val authorId: Long,
     @Embedded
     val attachment: AttachmentEmbeddable?,
 ) {
     fun toDto() = Post(
-        id,
-        author,
-        authorAvatar,
-        content,
-        published,
-        likedByMe,
-        likes,
-        shares,
-        videoUrl,
-        isRead,
-        attachment?.toDto()
+        id = id,
+        author = author,
+        authorAvatar = authorAvatar,
+        content = content,
+        published = published,
+        likedByMe = likedByMe,
+        likes = likes,
+        shares = shares,
+        videoUrl = videoUrl,
+        isRead = isRead,
+        attachment = attachment?.toDto(),
+        authorId = authorId
     )
 
     companion object {
@@ -48,7 +50,8 @@ data class PostEntity(
                 shares = dto.shares,
                 videoUrl = dto.videoUrl,
                 isRead = dto.isRead,
-                attachment = AttachmentEmbeddable.fromDto(dto.attachment)
+                attachment = AttachmentEmbeddable.fromDto(dto.attachment),
+                authorId = dto.authorId
             )
 
     }
