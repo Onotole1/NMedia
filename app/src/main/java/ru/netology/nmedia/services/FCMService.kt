@@ -12,6 +12,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
 import ru.netology.nmedia.R
+import ru.netology.nmedia.auth.AppAuth
 import kotlin.random.Random
 
 
@@ -30,17 +31,18 @@ class FCMService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-
-        message.data[action]?.let {
-            when (it) {
-                likeChannelId -> handleLike(gson.fromJson(message.data[content], Like::class.java))
-                newPostChannelId -> handlerNewPost(gson.fromJson(message.data[content], NewPost::class.java))
-            }
-        }
+        println(message.data["content"])
+//        message.data[action]?.let {
+//            when (it) {
+//                likeChannelId -> handleLike(gson.fromJson(message.data[content], Like::class.java))
+//                newPostChannelId -> handlerNewPost(gson.fromJson(message.data[content], NewPost::class.java))
+//            }
+//        }
     }
 
     override fun onNewToken(token: String) {
         Log.d(TAG, "Refreshed token: $token")
+        AppAuth.getInstance().sendPushToken(token)
     }
 
     private fun createNotificationChannels() {
@@ -66,11 +68,7 @@ class FCMService : FirebaseMessagingService() {
 //        val notification = NotificationCompat.Builder(this, likeChannelId)
 //            .setSmallIcon(R.drawable.ic_notification)
 //            .setContentTitle(
-//                getString(
-//                    R.string.notification_user_liked,
-//                    content.userName,
-//                    content.postAuthor,
-//                )
+//                "User {content.userName} liked {content.postAuthor}'s post"
 //            )
 //            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 //            .build()

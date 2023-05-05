@@ -2,9 +2,17 @@ package ru.netology.nmedia.auth
 
 import android.content.Context
 import androidx.core.content.edit
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import ru.netology.nmedia.api.Api
+import ru.netology.nmedia.dto.PushToken
 
 class AppAuth private constructor(context: Context) {
 
@@ -27,6 +35,8 @@ class AppAuth private constructor(context: Context) {
         } else {
             _authStateFlow.value = AuthState(id = id, token = token)
         }
+
+        sendPushToken()
     }
 
     @Synchronized
@@ -34,7 +44,9 @@ class AppAuth private constructor(context: Context) {
         _authStateFlow.value = AuthState()
         prefs.edit {
             clear()
+            commit()
         }
+        sendPushToken()
     }
 
     @Synchronized
@@ -43,8 +55,23 @@ class AppAuth private constructor(context: Context) {
         prefs.edit {
             putLong(ID,id)
             putString(TOKEN, token)
+            apply()
+        }
+        sendPushToken()
+    }
+
+    fun sendPushToken(token: String? = null) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val pushToken = PushToken(token ?: Firebase.messaging.token.await())
+                Api.retrofitService.saveToken(pushToken)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                TODO("Not yet implemented")
+            }
         }
     }
+
 
     companion object {
 
