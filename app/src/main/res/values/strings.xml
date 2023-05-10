@@ -34,5 +34,13 @@
     <string name="description_take_photo">Take photo</string>
     <string name="edit_text">Enter text of your post, please</string>
     <string name="menu_cancel">Cancel post</string>
-
+    <string name="signout">Sign Out</string>
+    <string name="signin">Sign In</string>
+    <string name="signup">Sign Up</string>
+    <string name="user_name">User name</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="empty_login" >Please, fill in fields</string>
+    <string name="server_not_connected" >Sorry, we haven\'t connection with server. Chech internet and try later</string>
+    <string name="login_pass_error" >Login or password is wrong. Please, check login and password</string>
 </resources>
