@@ -14,9 +14,16 @@ import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
 import kotlin.random.Random
+import dagger.hilt.EntryPoint
+import ru.netology.nmedia.auth.AppAuth
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FCMService : FirebaseMessagingService() {
+
+    @Inject
+    lateinit var appAuth: AppAuth
+
     private val action = "action"
     private val content = "content"
     private val likeChannelId = "like"

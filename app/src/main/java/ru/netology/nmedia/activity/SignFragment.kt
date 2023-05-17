@@ -14,8 +14,16 @@ import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.util.AndroidUtils
 import ru.netology.nmedia.viewModel.SignViewModel
 import ru.netology.nmedia.viewmodel.AuthViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import ru.netology.nmedia.auth.AppAuth
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SignFragment : Fragment() {
+
+    @Inject
+    lateinit var appAuth: AppAuth
+
     private val viewModel: SignViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )

@@ -18,6 +18,7 @@ import ru.netology.nmedia.repository.PostRepository
 import ru.netology.nmedia.repository.PostRepositoryImpl
 import ru.netology.nmedia.util.SingleLiveEvent
 import javax.inject.Inject
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 private val empty = Post(
     id = 0,
@@ -33,11 +34,13 @@ private val empty = Post(
     authorId = 0L
 )
 
+@HiltViewModel
 class PostViewModel @Inject constructor(
+    appAuth: AppAuth,
     private  val repository: PostRepository,
 ) : ViewModel() {
 
-    val data: LiveData<FeedModel> = AppAuth.getInstance().authStateFlow.flatMapLatest { (myId, _) ->
+    val data: LiveData<FeedModel> = appAuth.authStateFlow.flatMapLatest { (myId, _) ->
 
         repository.data
             .map { posts ->

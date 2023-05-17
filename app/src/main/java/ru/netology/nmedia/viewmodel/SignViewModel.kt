@@ -17,28 +17,43 @@ import ru.netology.nmedia.repository.PostRepository
 import ru.netology.nmedia.repository.PostRepositoryImpl
 import ru.netology.nmedia.util.SingleLiveEvent
 import java.net.SocketTimeoutException
+import android.content.Context
+import android.widget.Toast
+import androidx.lifecycle.*
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import ru.netology.nmedia.api.PostsApiService
+import ru.netology.nmedia.dto.UserKey
+import javax.inject.Inject
 
-class SignViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: PostRepository =
-        PostRepositoryImpl(AppDb.getInstance(context = application).postDao())
+@HiltViewModel
+class SignViewModel @Inject constructor(
+    private val apiService: PostsApiService
+) : ViewModel() {
 
+
+    private val _data: MutableLiveData<UserKey> = MutableLiveData<UserKey>()
+    val data: LiveData<UserKey>
+        get() = _data
 
     private val _state = SingleLiveEvent<AuthModelState>()
     val state: LiveData<AuthModelState>
         get() = _state
 
-    fun signIn(login: String, pass: String) = viewModelScope.launch {
+
+    fun signIn(login: String, pass: String, @ApplicationContext context: Context) =
+        viewModelScope.launch {
 //        val response = repository.signIn()
 //        response.token?.let { AppAuth.getInstance().setAuth(response.id, response.token) }
-        try {
-            val response = repository.signIn(login, pass)
-            response.token?.let { AppAuth.getInstance().setAuth(response.id, response.token) }
-            _state.value = AuthModelState(successfulRequest = true)
-        } catch (e: ApiError) {
-            _state.value = AuthModelState(loginAndPassError = true)
-        } catch (e: Exception) {
-            _state.value = AuthModelState(connectionError = true)
+            try {
+                val response = apiService.updateUser(login, pass)
+                response.token?.let { AppAuth.getInstance().setAuth(response.id, response.token) }
+                _state.value = AuthModelState(successfulRequest = true)
+            } catch (e: ApiError) {
+                _state.value = AuthModelState(loginAndPassError = true)
+            } catch (e: Exception) {
+                _state.value = AuthModelState(connectionError = true)
+            }
         }
-    }
 
 }

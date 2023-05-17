@@ -20,7 +20,9 @@ import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.DataModel
 import ru.netology.nmedia.viewmodel.PostViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FeedFragment : Fragment() {
     private val dataModel: DataModel by activityViewModels()
     private val viewModel: PostViewModel by viewModels(
@@ -154,18 +156,18 @@ class FeedFragment : Fragment() {
 
                     return when (menuItem.itemId) {
                         R.id.signOut -> {
-                            AppAuth.getInstance().clear()
+                            AppAuth.clear()
                             //HW
                             true
                         }
                         R.id.signIn -> {
-                            AppAuth.getInstance().setAuth(5, "x-token")
+                            AppAuth.setAuth(5, "x-token")
 
                             findNavController().navigate(R.id.action_feedFragment_to_signIn)
                             true
                         }
                         R.id.signUp -> {
-                            AppAuth.getInstance().setAuth(5, "x-token")
+                            AppAuth.setAuth(5, "x-token")
                             //HW
                             true
                         }

@@ -11,6 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import ru.netology.nmedia.BuildConfig
 import javax.inject.Singleton
+import ru.netology.nmedia.api.PostsApiService
 
 
 @InstallIn(SingletonComponent::class)
@@ -73,13 +74,13 @@ class ApiModule {
     @Provides
     fun provideApiServicePost(
         retrofit: Retrofit
-    ) :PostApiService =retrofit.create()
+    ) :PostsApiService =retrofit.create()
 
     @Singleton
     @Provides
     fun provideApiServiceMedia(
         retrofit: Retrofit
-    ) :PostApiService =retrofit.create()
+    ) :PostsApiService =retrofit.create()
 
 
 }

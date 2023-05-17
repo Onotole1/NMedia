@@ -10,8 +10,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.Glide.with
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentPhotoBinding
+import dagger.hilt.android.AndroidEntryPoint
+//import ru.netology.nmedia.util.GlideApp
 
-
+@AndroidEntryPoint
 class PhotoFragment : Fragment() {
 
 
