@@ -12,6 +12,7 @@ import retrofit2.create
 import ru.netology.nmedia.BuildConfig
 import javax.inject.Singleton
 import ru.netology.nmedia.api.PostsApiService
+import javax.inject.Qualifier
 
 
 @InstallIn(SingletonComponent::class)
@@ -31,17 +32,20 @@ class ApiModule {
         }
     }
 
+
     @Singleton
     @Provides
     fun provideCommonOkhttp() : OkHttpClient = OkHttpClient.Builder()
         .build()
 
+    @MediaOkHttp
     @Singleton
     @Provides
     fun provideMediaOkhttp(): OkHttpClient = provideCommonOkhttp().newBuilder()
         .addInterceptor(HttpLoggingInterceptor())
         .build()
 
+    @PostOkHttp
     @Singleton
     @Provides
     fun providePostOkhttp(
@@ -52,6 +56,7 @@ class ApiModule {
 
     @Singleton
     @Provides
+    @PostRetrofit
     fun providePostRetrofit(
         okHttpClient: OkHttpClient
     ) : Retrofit     = Retrofit.Builder()
@@ -62,6 +67,7 @@ class ApiModule {
 
     @Singleton
     @Provides
+    @MediaRetrofit
     fun provideMediaRetrofit(
         okHttpClient: OkHttpClient
     ) : Retrofit = Retrofit.Builder()
@@ -73,14 +79,27 @@ class ApiModule {
     @Singleton
     @Provides
     fun provideApiServicePost(
+        @PostRetrofit
         retrofit: Retrofit
-    ) :PostsApiService =retrofit.create()
+    ): PostsApiService = retrofit.create()
 
     @Singleton
     @Provides
     fun provideApiServiceMedia(
+        @MediaRetrofit
         retrofit: Retrofit
-    ) :PostsApiService =retrofit.create()
+    ): SMediaService = retrofit.create()
 
+    @Qualifier
+    private annotation class MediaRetrofit
+
+    @Qualifier
+    private annotation class PostRetrofit
+
+    @Qualifier
+    private annotation class MediaOkHttp
+
+    @Qualifier
+    private annotation class PostOkHttp
 
 }

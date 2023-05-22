@@ -21,13 +21,17 @@ import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.DataModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FeedFragment : Fragment() {
+
+    @Inject
+    lateinit var appAuth: AppAuth
+
     private val dataModel: DataModel by activityViewModels()
-    private val viewModel: PostViewModel by viewModels(
-        ownerProducer = ::requireParentFragment
-    )
+    private val viewModel: PostViewModel by activityViewModels()
+
     private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreateView(
@@ -156,18 +160,18 @@ class FeedFragment : Fragment() {
 
                     return when (menuItem.itemId) {
                         R.id.signOut -> {
-                            AppAuth.clear()
+                            appAuth.clear()
                             //HW
                             true
                         }
                         R.id.signIn -> {
-                            AppAuth.setAuth(5, "x-token")
+                            appAuth.setAuth(5, "x-token")
 
                             findNavController().navigate(R.id.action_feedFragment_to_signIn)
                             true
                         }
                         R.id.signUp -> {
-                            AppAuth.setAuth(5, "x-token")
+                            appAuth.setAuth(5, "x-token")
                             //HW
                             true
                         }

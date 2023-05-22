@@ -86,11 +86,7 @@ interface PostsApiService {
     suspend fun updateUser(@Field("login") login : String, @Field("pass") pass : String) : Response<AuthState>
 }
 
-interface MediaService {
-    @Multipart
-    @POST("media")
-    suspend fun uploadPhoto(@Part file: MultipartBody.Part): Response<Media>
-}
+
 
 
 //object PostsApi {

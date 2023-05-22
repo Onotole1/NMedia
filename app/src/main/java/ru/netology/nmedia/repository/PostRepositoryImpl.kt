@@ -11,8 +11,7 @@ import kotlinx.coroutines.flow.map
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.asRequestBody
-import ru.netology.nmedia.api.MediaService
-import ru.netology.nmedia.api.PostsApi
+import ru.netology.nmedia.api.SMediaService
 import ru.netology.nmedia.auth.AuthState
 import java.io.IOException
 import java.util.concurrent.TimeUnit
@@ -34,7 +33,7 @@ import javax.inject.Inject
 class PostRepositoryImpl @Inject constructor(
     private val postDao: PostDao,
     private val apiService: PostsApiService,
-    private val mediaApiService: MediaService) : PostRepository {
+    private val mediaApiService: SMediaService) : PostRepository {
 
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)

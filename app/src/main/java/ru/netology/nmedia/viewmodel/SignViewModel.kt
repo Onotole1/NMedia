@@ -28,7 +28,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignViewModel @Inject constructor(
-    private val apiService: PostsApiService
+    private val apiService: PostsApiService,
+    private val appAuth: AppAuth
 ) : ViewModel() {
 
 
@@ -41,13 +42,15 @@ class SignViewModel @Inject constructor(
         get() = _state
 
 
-    fun signIn(login: String, pass: String, @ApplicationContext context: Context) =
+    fun signIn(login: String, pass: String) =
         viewModelScope.launch {
 //        val response = repository.signIn()
 //        response.token?.let { AppAuth.getInstance().setAuth(response.id, response.token) }
             try {
                 val response = apiService.updateUser(login, pass)
-                response.token?.let { AppAuth.getInstance().setAuth(response.id, response.token) }
+                response.body()?.let { body ->
+                    appAuth.setAuth(body.id, body.token.orEmpty())
+                }
                 _state.value = AuthModelState(successfulRequest = true)
             } catch (e: ApiError) {
                 _state.value = AuthModelState(loginAndPassError = true)

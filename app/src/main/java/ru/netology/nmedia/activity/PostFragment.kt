@@ -39,9 +39,7 @@ class PostFragment : Fragment() {
         )
 
 
-        val viewModel: PostViewModel by viewModels(
-            ownerProducer = ::requireParentFragment,
-        )
+        val viewModel: PostViewModel by activityViewModels()
 
 
         with(binding.scrollContent) {
