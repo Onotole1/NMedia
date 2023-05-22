@@ -13,7 +13,7 @@ android {
     defaultConfig {
         applicationId "ru.netology.nmedia"
         minSdk 24
-        targetSdk 33
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
 
@@ -96,6 +96,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutines_version"
     implementation "com.github.dhaval2404:imagepicker:$imagepicker_version"
 
     testImplementation "junit:junit:$junit_version"
