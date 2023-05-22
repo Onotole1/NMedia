@@ -21,8 +21,10 @@
     <string name="channel_remote_description">Notifications from remote server</string>
     <string name="channel_like_name">Like notifications</string>
     <string name="channel_newPost_name">New post notifications</string>
+    <string name="channel_pushToken_name" translatable="false">Push Token</string>
     <string name="channel_like_description">Notifications like</string>
     <string name="channel_new_post_description">Notifications new post</string>
+    <string name="channel_push_description" >Notifications push</string>
     <string name="notification_user_new_post">User %1$s create new post</string>
     <string name="error_loading">Please, try again later</string>
     <string name="retry_loading">Please, retry</string>
