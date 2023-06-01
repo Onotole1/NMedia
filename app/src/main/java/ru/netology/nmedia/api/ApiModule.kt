@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -12,6 +13,7 @@ import retrofit2.create
 import ru.netology.nmedia.BuildConfig
 import javax.inject.Singleton
 import ru.netology.nmedia.api.PostsApiService
+import ru.netology.nmedia.auth.AppAuth
 import javax.inject.Qualifier
 
 
@@ -25,11 +27,23 @@ class ApiModule {
 
 
     @Provides
-    @Singleton
     fun provideLogging(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
         if (BuildConfig.DEBUG) {
             level = HttpLoggingInterceptor.Level.BODY
         }
+    }
+
+    @Provides
+    fun provideAuthInterceptor(appAuth: AppAuth): Interceptor = Interceptor { chain ->
+        appAuth.authStateFlow.value.token?.let { token ->
+            chain
+                .request()
+                .newBuilder()
+                .addHeader("Authorization", token)
+                .build()
+                .apply { return@Interceptor chain.proceed(this) }
+        }
+        return@Interceptor chain.proceed(chain.request())
     }
 
 

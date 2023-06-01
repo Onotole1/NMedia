@@ -2,11 +2,13 @@ package ru.netology.nmedia.auth
 
 import android.content.Context
 import androidx.core.content.edit
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-class AppAuth private constructor(context: Context) {
+class AppAuth @Inject constructor(@ApplicationContext context: Context) {
 
     private val prefs = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
     private val _authStateFlow = MutableStateFlow(AuthState())
