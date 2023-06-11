@@ -8,28 +8,20 @@ import androidx.navigation.findNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.messaging.FirebaseMessaging
+import org.koin.android.ext.android.inject
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.Companion.Companion.textArg
 import ru.netology.nmedia.databinding.ActivityAppBinding
-import dagger.hilt.android.AndroidEntryPoint
-import ru.netology.nmedia.auth.AppAuth
-import javax.inject.Inject
 
-@AndroidEntryPoint
 class AppActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var appAuth: AppAuth
+    private val googleApiAvailability: GoogleApiAvailability by inject()
 
-    @Inject
-    lateinit var googleApiAvailability: GoogleApiAvailability
-
-    @Inject
-    lateinit var firebaseMessaging: FirebaseMessaging
+    private val firebaseMessaging: FirebaseMessaging by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityAppBinding.inflate (layoutInflater)
+        val binding = ActivityAppBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         intent?.let {

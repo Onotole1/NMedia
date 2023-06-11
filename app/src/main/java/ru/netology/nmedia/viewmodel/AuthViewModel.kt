@@ -3,11 +3,8 @@ package ru.netology.nmedia.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import ru.netology.nmedia.auth.AppAuth
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 
-@HiltViewModel
-class AuthViewModel @Inject constructor(
+class AuthViewModel(
     private val appAuth: AppAuth
 ) : ViewModel() {
 

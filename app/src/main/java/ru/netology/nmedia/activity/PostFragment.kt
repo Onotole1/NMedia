@@ -9,24 +9,18 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.NonCancellable.start
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentPostBinding
-import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.util.ChangeNumber.changeNumber
 import ru.netology.nmedia.viewmodel.DataModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 
-@AndroidEntryPoint
 class PostFragment : Fragment() {
 
-    private val dataModel: DataModel by activityViewModels()
+    private val dataModel: DataModel by activityViewModel()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,7 +33,7 @@ class PostFragment : Fragment() {
         )
 
 
-        val viewModel: PostViewModel by activityViewModels()
+        val viewModel: PostViewModel by activityViewModel()
 
 
         with(binding.scrollContent) {

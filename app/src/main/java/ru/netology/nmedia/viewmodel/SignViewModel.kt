@@ -1,33 +1,18 @@
-package ru.netology.nmedia.viewModel
+package ru.netology.nmedia.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.common.api.ApiException
 import kotlinx.coroutines.launch
+import ru.netology.nmedia.api.PostsApiService
 import ru.netology.nmedia.auth.AppAuth
-import ru.netology.nmedia.db.AppDb
+import ru.netology.nmedia.dto.UserKey
 import ru.netology.nmedia.error.ApiError
 import ru.netology.nmedia.model.AuthModelState
-import ru.netology.nmedia.model.FeedModelState
-
-import ru.netology.nmedia.repository.PostRepository
-import ru.netology.nmedia.repository.PostRepositoryImpl
 import ru.netology.nmedia.util.SingleLiveEvent
-import java.net.SocketTimeoutException
-import android.content.Context
-import android.widget.Toast
-import androidx.lifecycle.*
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
-import ru.netology.nmedia.api.PostsApiService
-import ru.netology.nmedia.dto.UserKey
-import javax.inject.Inject
 
-@HiltViewModel
-class SignViewModel @Inject constructor(
+class SignViewModel(
     private val apiService: PostsApiService,
     private val appAuth: AppAuth
 ) : ViewModel() {

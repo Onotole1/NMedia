@@ -11,8 +11,6 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import ru.netology.nmedia.api.PostsApiService
 import ru.netology.nmedia.api.SMediaService
 import ru.netology.nmedia.auth.AuthState
-import java.io.IOException
-import java.util.concurrent.TimeUnit
 import ru.netology.nmedia.dao.PostDao
 import ru.netology.nmedia.dto.*
 import ru.netology.nmedia.entity.PostEntity
@@ -22,27 +20,14 @@ import ru.netology.nmedia.error.ApiError
 import ru.netology.nmedia.error.NetworkError
 import ru.netology.nmedia.error.UnknownError
 import ru.netology.nmedia.model.PhotoModel
-import java.lang.Exception
-import java.net.ConnectException
+import java.io.IOException
 import java.util.concurrent.CancellationException
-import javax.inject.Inject
 
-class PostRepositoryImpl @Inject constructor(
+class PostRepositoryImpl(
     private val postDao: PostDao,
     private val postsApiService: PostsApiService,
     private val mediaService: SMediaService,
 ) : PostRepository {
-
-//    private val client = OkHttpClient.Builder()
-//        .connectTimeout(30, TimeUnit.SECONDS)
-//        .build()
-//    private val gson = Gson()
-//    private val typeToken = object : TypeToken<List<Post>>() {}
-//
-//    companion object {
-//        private const val BASE_URL = "http://10.0.2.2:9999"
-//        private val jsonType = "application/json".toMediaType()
-//    }
 
     override val data = postDao.getAll()
         .map(List<PostEntity>::toDto)

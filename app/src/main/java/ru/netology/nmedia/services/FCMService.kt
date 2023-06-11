@@ -1,4 +1,4 @@
-package ru.netology.nmedia.service
+package ru.netology.nmedia.services
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -6,23 +6,16 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Build
 import android.util.Log
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.android.ext.android.inject
 import ru.netology.nmedia.R
-import kotlin.random.Random
-import dagger.hilt.EntryPoint
 import ru.netology.nmedia.auth.AppAuth
-import javax.inject.Inject
 
-@AndroidEntryPoint
 class FCMService : FirebaseMessagingService() {
 
-    @Inject
-    lateinit var appAuth: AppAuth
+    private val appAuth: AppAuth by inject()
 
     private val action = "action"
     private val content = "content"

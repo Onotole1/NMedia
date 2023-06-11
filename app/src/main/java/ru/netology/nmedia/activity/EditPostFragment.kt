@@ -6,17 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentEditPostBinding
 import ru.netology.nmedia.util.AndroidUtils
 import ru.netology.nmedia.util.StringArg
 import ru.netology.nmedia.viewmodel.PostViewModel
 
-@AndroidEntryPoint
 class EditPostFragment : Fragment() {
 
     companion object {
@@ -24,7 +21,7 @@ class EditPostFragment : Fragment() {
 
     }
 
-    private val viewModel: PostViewModel by activityViewModels()
+    private val viewModel: PostViewModel by activityViewModel()
 
 
     override fun onCreateView(
