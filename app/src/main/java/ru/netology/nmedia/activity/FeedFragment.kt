@@ -7,10 +7,10 @@ import android.view.*
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import kotlinx.coroutines.flow.observeOn
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
@@ -22,11 +22,13 @@ import ru.netology.nmedia.viewmodel.DataModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class FeedFragment : Fragment() {
-    private val dataModel: DataModel by activityViewModels()
-    private val viewModel: PostViewModel by viewModels(
-        ownerProducer = ::requireParentFragment
-    )
-    private val authViewModel: AuthViewModel by viewModels()
+
+    private val appAuth: AppAuth by inject()
+
+    private val dataModel: DataModel by activityViewModel()
+    private val viewModel: PostViewModel by activityViewModel()
+
+    private val authViewModel: AuthViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -154,18 +156,18 @@ class FeedFragment : Fragment() {
 
                     return when (menuItem.itemId) {
                         R.id.signOut -> {
-                            AppAuth.getInstance().clear()
+                            appAuth.clear()
                             //HW
                             true
                         }
                         R.id.signIn -> {
-                            AppAuth.getInstance().setAuth(5, "x-token")
+                            appAuth.setAuth(5, "x-token")
 
                             findNavController().navigate(R.id.action_feedFragment_to_signIn)
                             true
                         }
                         R.id.signUp -> {
-                            AppAuth.getInstance().setAuth(5, "x-token")
+                            appAuth.setAuth(5, "x-token")
                             //HW
                             true
                         }

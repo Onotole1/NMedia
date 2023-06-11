@@ -8,59 +8,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import retrofit2.http.*
-import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.auth.AuthState
 import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.Post
-import ru.netology.nmedia.dto.PushToken
 
-private const val BASE_URL = "${BuildConfig.BASE_URL}/api/slow/"
-
-private val logging = HttpLoggingInterceptor().apply {
-    if (BuildConfig.DEBUG) {
-        level = HttpLoggingInterceptor.Level.BODY
-    }
-}
-
-private val commonOkhttp = OkHttpClient.Builder()
-    .build()
-
-private val mediaOkhttp = commonOkhttp.newBuilder()
-    .addInterceptor(HttpLoggingInterceptor())
-    .build()
-
-private val postOkhttp = mediaOkhttp.newBuilder()
-    .addInterceptor(logging)
-    .addInterceptor { chain ->
-        AppAuth.getInstance().authStateFlow.value.token?.let { token ->
-            chain
-                .request()
-                .newBuilder()
-                .addHeader("Authorization", token)
-                .build()
-                .apply { return@addInterceptor chain.proceed(this) }
-        }
-        return@addInterceptor chain.proceed(chain.request())
-    }
-    .build()
-
-
-
-
-private val postRetrofit = Retrofit.Builder()
-    .addConverterFactory(GsonConverterFactory.create())
-    .baseUrl(BASE_URL)
-    .client(postOkhttp)
-    .build()
-
-private val mediaRetrofit = Retrofit.Builder()
-    .addConverterFactory(GsonConverterFactory.create())
-    .baseUrl(BASE_URL)
-    .client(mediaOkhttp)
-    .build()
-
-interface ApiService {
+interface PostsApiService {
     @GET("posts")
     suspend fun getAll(): Response<List<Post>>
 
@@ -85,9 +38,6 @@ interface ApiService {
     @FormUrlEncoded
     @POST("users/authentication")
     suspend fun updateUser(@Field("login") login : String, @Field("pass") pass : String) : Response<AuthState>
-
-    @POST("users/push-tokens")
-    suspend fun saveToken(@Body token: PushToken): Response<Unit>
 }
 
 interface MediaService {
@@ -96,13 +46,3 @@ interface MediaService {
     suspend fun uploadPhoto(@Part file: MultipartBody.Part): Response<Media>
 }
 
-
-object Api {
-    val retrofitService: ApiService by lazy {
-        postRetrofit.create()
-    }
-
-    val mediaService: MediaService by lazy {
-       mediaRetrofit.create()
-    }
-}

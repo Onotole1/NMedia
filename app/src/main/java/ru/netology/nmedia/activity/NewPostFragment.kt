@@ -9,9 +9,9 @@ import androidx.core.net.toFile
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentNewPostBinding
 import ru.netology.nmedia.model.PhotoModel
@@ -25,9 +25,8 @@ class NewPostFragment : Fragment() {
         var Bundle.textArg: String? by StringArg
     }
 
-    private val viewModel: PostViewModel by viewModels(
-        ownerProducer = ::requireParentFragment
-    )
+    private val viewModel: PostViewModel by activityViewModel()
+
 
     private val photoLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {

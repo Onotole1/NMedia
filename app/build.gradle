@@ -1,14 +1,12 @@
-plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    id 'org.jetbrains.kotlin.kapt'
-    // Add the Google services Gradle plugin
-    id 'com.google.gms.google-services'
-}
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     namespace 'ru.netology.nmedia'
     compileSdk 33
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "ru.netology.nmedia"
@@ -20,7 +18,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildFeatures.viewBinding true
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+    }
 
     buildTypes {
         release {
@@ -67,7 +68,9 @@ dependencies {
     def retrofit_version = "2.9.0"
     def coroutines_version = "1.6.4"
     def imagepicker_version = "2.1"
+    def koin_version = "3.4.2"
 
+    implementation "io.insert-koin:koin-android:$koin_version"
     implementation "androidx.core:core-ktx:$core_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "com.google.android.material:material:$mdc_version"

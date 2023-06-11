@@ -7,10 +7,8 @@ import android.view.ViewGroup
 
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.bumptech.glide.Glide.with
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentPhotoBinding
-
 
 class PhotoFragment : Fragment() {
 
